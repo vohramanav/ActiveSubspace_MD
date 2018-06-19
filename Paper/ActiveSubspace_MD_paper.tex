@@ -1,0 +1,110 @@
+\documentclass[final,12pt]{article}
+%
+\input{def}
+\usepackage[table]{xcolor}
+\usepackage{booktabs} 
+\usepackage{relsize}
+\usepackage{bm}
+\usepackage{mathrsfs}
+\usepackage{amsmath,amssymb}
+\def\ol{\overline}
+\def\no{\noindent}
+\def\qd{\dot{Q}}
+%%%%%%%FLOW DIAGRAM%%%%%%%%%%
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+%\usepackage[table]{xcolor}
+\usetikzlibrary{positioning,shapes,arrows,arrows.meta}
+\usetikzlibrary{shapes.geometric}
+% Define block styles
+\tikzstyle{decision} = [diamond, minimum width=2.5cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{startstop} = [rectangle, draw, 
+   text width=4.5em, text centered, rounded corners]
+ \tikzstyle{process} = [rectangle, draw, 
+   text width=9.0em, text centered]  
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, node distance=3cm,
+   minimum height=2em]
+   \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, text width=9.5em,minimum height=1cm, text centered, draw, inner sep=0pt]
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\cs}[1]{\textcolor{blue}{CS: #1}}
+
+%% Breakable algorithm %%%
+\usepackage{algorithm,algpseudocode,float}
+\usepackage{lipsum}
+\makeatletter
+
+\newenvironment{breakablealgorithm}
+  {% \begin{breakablealgorithm}
+   \begin{center}
+     \refstepcounter{algorithm}% New algorithm
+     \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+     \renewcommand{\caption}[2][\relax]{% Make a new \caption
+       {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+       \ifx\relax##1\relax % #1 is \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+       \else % #1 is not \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+       \fi
+       \kern2pt\hrule\kern2pt
+     }
+  }{% \end{breakablealgorithm}
+     \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+   \end{center}
+  }
+  \makeatother
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+%%%%%%%%%%%%%%%%%
+
+
+%-------------------------------------------------------------------
+\begin{document}
+
+\thispagestyle{empty}
+\input{cover}
+
+\baselineskip=22pt
+
+%\tableofcontents
+
+%\input{abstract}
+%\clearpage
+%
+%\input{intro}
+%\bigskip
+%\bigskip
+%
+%
+%\input{bg}
+%\bigskip
+%\bigskip
+%
+%
+%\input{method}
+%\bigskip
+%\bigskip
+%
+%
+%\input{examples}
+%\bigskip
+%\bigskip
+%
+%
+%\input{app}
+%\bigskip
+%\bigskip
+%
+%
+%\input{disc}
+%\bigskip
+%\bigskip
+%
+%\input{ack}
+%\bigskip
+%\bigskip
+%
+%\bibliographystyle{unsrt}
+%\bibliography{REFER}
+
+\end{document}
