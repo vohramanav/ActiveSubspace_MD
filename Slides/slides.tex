@@ -1,0 +1,598 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  This Beamer template was created by Cameron Bracken.
+%%  Anyone can freely use or modify it for any purpose
+%%  without attribution.
+%%
+%%  Last Modified: January 9, 2009
+%%
+
+\documentclass[xcolor={x11names,table},compress,svgnames,mathserif]{beamer}
+
+%% General document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{spot}
+\usetikzlibrary{mindmap}
+\usetikzlibrary{decorations.fractals}
+%\usepackage{lmodern}
+\usepackage{animate}
+\usepackage{movie15}
+\usepackage{bm}
+\usepackage{pifont}
+\usepackage{smartdiagram}
+\usepackage[customcolors]{hf-tikz}
+\usepackage{empheq}
+\usepackage[many]{tcolorbox}
+\definecolor{pigment}{rgb}{0.2, 0.2, 0.6}
+\definecolor{armygreen}{rgb}{0.29, 0.33, 0.13}
+\usepackage{smartdiagram}
+\usepackage{booktabs} % for table bottomrule and toprule
+\usepackage{changepage} % shift tikzpicture horizontally
+
+\usepackage[absolute,overlay]{textpos}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% boxed equaton
+\usepackage[many]{tcolorbox}
+
+\pgfdeclarehorizontalshading{section shading}{2cm}{
+color(0cm)=(LightSlateGrey);
+color(2cm)=(gray!7);
+color(3cm)=(LightSlateGrey!15)
+}
+
+% Custom block environment
+% Custom block environment
+\newenvironment<>{varblock}[2][.9\textwidth]{%
+  \setlength{\textwidth}{#1}
+  \begin{actionenv}#3%
+    \def\insertblocktitle{#2}%
+    \par%
+    \usebeamertemplate{block begin}}
+  {\par%
+    \usebeamertemplate{block end}%
+  \end{actionenv}}
+  
+  %% Algorithm %%%%%
+\usepackage[linesnumbered]{algorithm2e}
+\newcommand{\nosemic}{\renewcommand{\@endalgocfline}{\relax}}% Drop semi-colon ;
+\newcommand{\dosemic}{\renewcommand{\@endalgocfline}{\algocf@endline}}% Reinstate semi-colon ;
+\newcommand{\pushline}{\Indp}% Indent
+\newcommand{\popline}{\Indm\dosemic}% Undent
+\let\oldnl\nl% Store \nl in \oldnl
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}% Remove line number for one
+\SetKwRepeat{Do}{do}{while}
+%%%%%%%%%%%%%%%%%
+
+% Vertical line between columns
+\newcommand{\vdashrule}[1]{\tikz[remember picture]\draw[dashed,thick,overlay](current page.north)--+(0,-#1);}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetikzlibrary{shapes,arrows,arrows.meta}
+\usetikzlibrary{positioning,decorations.pathreplacing}
+\tikzstyle{arrow} = [->,>=stealth, line width=1.2pt]
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=purple!20, 
+    text width=5.0em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw=none, fill=blue!20, anchor=north, 
+    text width=9.0em, text centered]
+    \tikzstyle{blockr} = [rectangle, draw, fill=blue!20, 
+    text width=9.0em, text centered, rounded corners]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw=none, ellipse,fill=purple!20, node distance=3cm,
+    minimum height=2em]
+\tikzstyle{startstop} = [rectangle, draw, fill=DeepSkyBlue4,text=white,
+   text width=4.5em, text centered, rounded corners]
+ \tikzstyle{process} = [rectangle, draw, fill=DeepSkyBlue4,text=white,
+   text width=9.0em, text centered]  
+ \tikzstyle{io} = [trapezium, fill=DeepSkyBlue4,text=white, trapezium left angle=70, trapezium right angle=110, minimum width=2cm, text width=9.5em,minimum height=1cm, text centered, draw, inner sep=0pt]
+    
+
+%% Beamer Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\useoutertheme[subsection=false,shadow]{miniframes}
+\useinnertheme{default}
+%\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{xcolor}
+\usepackage{amsmath,amsfonts,amssymb}
+
+\setbeamerfont{title like}{shape=\scshape}
+\setbeamerfont{frametitle}{shape=\scshape}
+\setbeamertemplate{itemize items}[triangle] % if you wnat a circle
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{navigation symbols}{}
+%\setbeamertemplate{footline}[frame number]
+
+\setbeamercolor{footlinecolor}{fg=white,bg=DeepSkyBlue4}
+\defbeamertemplate*{footline}{infolines theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{footlinecolor}
+ % {author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+   % \usebeamerfont{author in head/foot}\insertshortauthor~~(\insertshortinstitute)
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{footlinecolor}
+  %{date in head/foot}%
+   % \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \usebeamerfont{date in head/foot}{manav.vohra@vanderbilt.edu}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+%\setbeamercolor{section in head/foot}{fg=white, bg=DeepSkyBlue4}
+
+\setbeamercolor*{lower separation line head}{bg=DeepSkyBlue4} 
+\setbeamercolor*{normal text}{fg=black,bg=white} 
+\setbeamercolor*{alerted text}{fg=red} 
+\setbeamercolor*{example text}{fg=black} 
+\setbeamercolor*{structure}{fg=black} 
+ 
+\setbeamercolor*{palette tertiary}{fg=black,bg=black!10} 
+\setbeamercolor*{palette quaternary}{fg=black,bg=black!10} 
+
+\renewcommand{\(}{\begin{columns}}
+\renewcommand*\footnoterule{}
+\renewcommand{\)}{\end{columns}}
+\newcommand{\<}[1]{\begin{column}{#1}}
+\renewcommand{\>}{\end{column}}
+
+\newcommand*\subitem{%
+  \item[\color{DeepSkyBlue4}\scalebox{0.6}{\ding{228}}]}
+  
+  \newcommand*\subitemtwo{%
+  \item[\color{LightSlateGrey!15}\scalebox{0.6}{\ding{228}}]}
+
+\newcommand*\myitem{%
+  \item[\color{DeepSkyBlue4}\scalebox{0.6}{\ding{110}}]}
+ 
+  \newcommand*\myitemtwo{%
+  \item[\color{LightSlateGrey!15}\scalebox{0.6}{\ding{110}}]}
+  
+\newcommand*\Myitem{%
+  \item[\color{DeepSkyBlue4}\scalebox{0.9}{\ding{42}}]}
+  
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\p}{\partial}
+\def\ol{\overline}
+\def\no{\noindent}
+\def\Vb{{\cal V}}
+\def\Qd{\dot{Q}}
+\newcommand{\angstrom}{\textup{\AA}}
+%\DeclareMathSymbol{\ast}{\mathbin}{symbols}{"03}
+ \newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+ 
+
+%---------------------QUOTATION--------------------------
+\usepackage{etoolbox}
+%\usepackage[svgnames]{xcolor}
+\usepackage{framed}
+
+% conditional for xetex or luatex
+\newif\ifxetexorluatex
+\ifxetex
+  \xetexorluatextrue
+\else
+  \ifluatex
+    \xetexorluatextrue
+  \else
+    \xetexorluatexfalse
+  \fi
+\fi
+%
+\ifxetexorluatex%
+  \usepackage{fontspec}
+  \usepackage{libertine} % or use \setmainfont to choose any font on your system
+  \newfontfamily\quotefont[Ligatures=TeX]{Linux Libertine O} % selects Libertine as the quote font
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  %\usepackage{libertine} % or any other font package
+  \newcommand*\quotefont{\fontfamily{LinuxLibertineT-LF}} % selects Libertine as the quote font
+\fi
+
+\newcommand*\quotesize{30} % if quote size changes, need a way to make shifts relative
+% Make commands for the quotes
+\newcommand*{\openquote}
+   {\tikz[remember picture,overlay,xshift=-3ex,yshift=-0.5ex]
+   \node (OQ) {\quotefont\fontsize{\quotesize}{\quotesize}\selectfont``};\kern0pt}
+
+\newcommand*{\closequote}[1]
+  {\tikz[remember picture,overlay,xshift=-15ex,yshift={#1}]
+   \node (CQ) {\quotefont\fontsize{\quotesize}{\quotesize}\selectfont''};}
+
+% select a colour for the shading
+\colorlet{shadecolor}{Azure}
+
+\newcommand*\shadedauthorformat{\emph} % define format for the author argument
+
+% Now a command to allow left, right and centre alignment of the author
+\newcommand*\authoralign[1]{%
+  \if#1l
+    \def\authorfill{}\def\quotefill{\hfill}
+  \else
+    \if#1r
+      \def\authorfill{\hfill}\def\quotefill{}
+    \else
+      \if#1c
+        \gdef\authorfill{\hfill}\def\quotefill{\hfill}
+      \else\typeout{Invalid option}
+      \fi
+    \fi
+  \fi}
+% wrap everything in its own environment which takes one argument (author) and one optional argument
+% specifying the alignment [l, r or c]
+%
+\newenvironment{shadequote}[2][l]%
+{\authoralign{#1}
+\ifblank{#2}
+   {\def\shadequoteauthor{}\def\yshift{-2ex}\def\quotefill{\hfill}}
+   {\def\shadequoteauthor{\par\authorfill\shadedauthorformat{#2}}\def\yshift{2ex}}
+\begin{snugshade}\begin{quote}\openquote}
+{\shadequoteauthor\quotefill\closequote{\yshift}\end{quote}\end{snugshade}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[Dimension Reduction: Molecular Dynamics]{\textbf{Efficient UQ for Atomistic Simulations using Active Subspaces}}
+\thispagestyle{empty}
+\pgfsetfillopacity{0.9}
+\setbeamercolor{title}{bg=DeepSkyBlue4,fg=white}
+
+
+%\subtitle{SUBTITLE}
+\author[M. Vohra]{Manav Vohra$^{\dag}$, Alen Alexanderian$^{\ddag}$, Sankaran Mahadevan$^{\dag}$}
+\vspace{-1mm}
+\institute{$^{\dag}$Vanderbilt University\\ \vspace{1mm}
+$^{\ddag}$North Carolina State University}
+
+\date{\today}
+
+
+
+\begin{document}
+
+%___________________________NEW SLIDE______________________________________
+{
+\setbeamertemplate{headline}{}
+
+\begin{frame}[noframenumbering]
+
+\titlepage
+\vspace{-21mm}
+\centering
+
+\end{frame}
+}
+
+
+%___________________________NEW SLIDE______________________________________
+
+\section{Active Subspaces}
+\subsection{ac}
+\begin{frame}[noframenumbering]{Background $\&$ Motivation} 
+\normalsize
+\vspace{2mm}
+\begin{itemize}
+\myitem \textbf{Idea}: {\color{pigment}Discover} and {\color{pigment}Exploit} a {\color{pigment}low-dimensional}
+structure in the model. 
+
+\vspace{2mm}
+\begin{table}[htbp]
+\scriptsize
+\renewcommand*{\arraystretch}{1.2}
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Parameters & Model Runs & Time (1s/run)\\
+\bottomrule
+1 & 10 & 10 s \\
+2 & 10$^2$ & 1.6 min \\
+3 & 10$^3$ & 16 min \\
+4 & 10$^4$ & 2.7 hours \\
+5 & 10$^5$ & 1.1 days \\
+6 & 10$^6$ & 1.6 weeks \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\tikz[overlay, remember picture] \node at (2.95,3.7) {\tiny{Active Subspaces}};
+\tikz[overlay, remember picture] \node at (2.85,1.8) {
+\begin{tcolorbox}[width=0.16\textwidth,height=0.32\textwidth,colback=DeepSkyBlue!10,notitle,colframe=DeepSkyBlue!20,colupper=DeepSkyBlue4,enhanced,opacityfill=0.3]
+\end{tcolorbox}
+};
+
+\myitem \textbf{Definition}: Dominant eigenspace of a matrix derived from the model's gradient. 
+\vspace{-4mm}
+
+\begin{center}
+%\scriptsize{
+\be
+\begin{aligned}
+\int \nabla f(\bm(x))\nabla f(\bm{x})^\top\rho(\bm{x})d\bm{x} &= W\Lambda W^\top \\ 
+\vspace{-2mm}
+f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
+\end{aligned} \nonumber
+\ee
+ \end{center}
+
+\end{itemize}
+\end{frame}
+
+
+%___________________________NEW SLIDE______________________________________
+
+\subsection{ac}
+\begin{frame}{Non-Equilibrium Molecular Dynamics} 
+\normalsize
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+\myitem \textbf{QoI}: Bulk thermal conductivity ($\kappa$)
+\vspace{-3mm}
+\begin{center}
+\scriptsize
+\begin{tcolorbox}[width=0.24\textwidth,height=0.15\textwidth,colback=DeepSkyBlue!20,notitle,colframe=DeepSkyBlue!20,colupper=DeepSkyBlue4]
+\vspace{-7mm}
+\be
+\hspace{-3.5mm}
+\kappa = \frac{q}{\left|\frac{dT}{dz}\right|} \nonumber
+\ee
+\end{tcolorbox}
+\end{center}
+\normalsize
+\vspace{-1mm}
+\myitem Stillinger-Weber potential:
+\vspace{-2mm}
+\begin{center}
+\tiny
+\hspace{-2mm}
+\begin{tcolorbox}[width=1.03\textwidth, height=0.18\textwidth,colback=DeepSkyBlue!20,notitle,colframe=DeepSkyBlue!20,colupper=DeepSkyBlue4]
+\vspace{-4mm}
+\be
+\hspace{-5mm}
+\Phi(1,\ldots,N) = \sum\limits_{i,j(i<j)}v_{ij}^{(2)}(A,B,p,q,\alpha)\hspace{1mm}+\sum\limits_{i,j,k(i<j<k)}v_{ij}^{(3)}(\lambda,\gamma)\nonumber
+\ee
+\end{tcolorbox}
+\end{center}
+\vspace{-2mm}
+\begin{itemize}
+\setlength{\itemindent}{-1em}
+\scriptsize
+\item {\color{pigment}Inadequate} functional representation. \vspace{0.5mm}
+\item Estimates based on a {\color{pigment}limited} search. \vspace{0.5mm}
+\item Unaccounted data and MD {\color{pigment}noise}. 
+\end{itemize}
+
+\normalsize
+\myitem UQ is computationally prohibitive.
+
+\end{itemize}
+\end{column}
+\hspace{5mm}
+\begin{column}{0.4\textwidth}
+
+\begin{center}
+\begin{figure}[htbp]
+\includegraphics[width=0.8\textwidth]{./Figures/schematic_md}
+\end{figure}
+\vspace{5mm}
+       \animategraphics[autoplay,poster=first,loop,height=0.60\textwidth]{5}
+       {./animation/snap}{0}{64}
+\end{center}
+\normalsize
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%___________________________NEW SLIDE______________________________________
+
+\subsection{ac}
+\begin{frame}{Dimension Reduction: Active Subspaces} 
+\vspace{1mm}
+\scriptsize
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\myitem Positive semi-definite matrix:
+\vspace{-2mm}
+\be
+\begin{aligned}
+\mathcal{C} &= \int \nabla f(\bm{x})\nabla f(\bm{x})^{\top}\rho(\bm{x})d\bm{x} = \bm{W}\Lambda\bm{W}^\top \\
+&\approx \frac{1}{N}\sum_{i=1}^{N} \nabla_{\bm{x}}f_i\nabla_{\bm{x}}f_i^\top = 
+\hat{\bm{W}}\hat{\Lambda}\hat{\bm{W}}^{\top} \nonumber
+\end{aligned}
+\ee
+
+\myitem Partition of Eigenpairs:
+\vspace{-2mm}
+\begin{gather}
+\Lambda = 
+\begin{bmatrix}
+\Lambda_1 & \\ & \Lambda_2 \nonumber
+\end{bmatrix},~~\bm{W} = \left[\bm{W}_1~\bm{W}_2\right]
+\end{gather}
+\end{itemize}
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{./Figures/eig_MD}
+\end{figure}
+\end{column}
+\end{columns}
+\vspace{2mm}
+\dotfill
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\vspace{-2mm}
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{./Figures/ssp1D_MD}
+\end{figure}
+\end{column}
+\hspace{-18mm}
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\vspace{-2.5mm}
+\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP1D}
+\end{figure}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%___________________________NEW SLIDE______________________________________
+
+\subsection{ac}
+\begin{frame}[noframenumbering]{Dimension Reduction: Active Subspaces} 
+\vspace{1mm}
+\scriptsize
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\myitem Positive semi-definite matrix:
+\vspace{-2mm}
+\be
+\begin{aligned}
+\mathcal{C} &= \int \nabla f(\bm{x})\nabla f(\bm{x})^{\top}\rho(\bm{x})d\bm{x} = \bm{W}\Lambda\bm{W}^\top \\
+&\approx \frac{1}{N}\sum_{i=1}^{N} \nabla_{\bm{x}}f_i\nabla_{\bm{x}}f_i^\top = 
+\hat{\bm{W}}\hat{\Lambda}\hat{\bm{W}}^{\top} \nonumber
+\end{aligned}
+\ee
+
+\myitem Partition of Eigenpairs:
+\vspace{-2mm}
+\begin{gather}
+\Lambda = 
+\begin{bmatrix}
+\Lambda_1 & \\ & \Lambda_2 \nonumber
+\end{bmatrix},~~\bm{W} = \left[\bm{W}_1~\bm{W}_2\right]
+\end{gather}
+\end{itemize}
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{./Figures/eig_MD}
+\end{figure}
+\end{column}
+\end{columns}
+\vspace{2mm}
+\dotfill
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\vspace{-2mm}
+\begin{figure}[htbp]
+\includegraphics[width=0.75\textwidth]{./Figures/ssp2D}
+\end{figure}
+\end{column}
+\hspace{-18mm}
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\vspace{-2.5mm}
+\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP2D}
+\end{figure}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%___________________________NEW SLIDE______________________________________
+
+\subsection{ac}
+\begin{frame}[noframenumbering]{Dimension Reduction: Active Subspaces} 
+\vspace{1mm}
+\scriptsize
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\myitem Positive semi-definite matrix:
+\vspace{-2mm}
+\be
+\begin{aligned}
+\mathcal{C} &= \int \nabla f(\bm{x})\nabla f(\bm{x})^{\top}\rho(\bm{x})d\bm{x} = \bm{W}\Lambda\bm{W}^\top \\
+&\approx \frac{1}{N}\sum_{i=1}^{N} \nabla_{\bm{x}}f_i\nabla_{\bm{x}}f_i^\top = 
+\hat{\bm{W}}\hat{\Lambda}\hat{\bm{W}}^{\top} \nonumber
+\end{aligned}
+\ee
+
+\myitem Partition of Eigenpairs:
+\vspace{-2mm}
+\begin{gather}
+\Lambda = 
+\begin{bmatrix}
+\Lambda_1 & \\ & \Lambda_2 \nonumber
+\end{bmatrix},~~\bm{W} = \left[\bm{W}_1~\bm{W}_2\right]
+\end{gather}
+\end{itemize}
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{./Figures/eig_MD}
+\end{figure}
+\end{column}
+\end{columns}
+\vspace{2mm}
+\dotfill
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\vspace{-2mm}
+\begin{figure}[htbp]
+\includegraphics[width=0.75\textwidth]{./Figures/ssp2D}
+\end{figure}
+\end{column}
+\hspace{-18mm}
+\begin{column}{0.5\textwidth}
+\begin{figure}[htbp]
+\vspace{-2.5mm}
+\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP3D}
+\end{figure}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%___________________________NEW SLIDE______________________________________
+
+\subsection{ac}
+\begin{frame}{Key Contributions} 
+\normalsize
+
+\begin{itemize}
+
+\myitem Discovered an active subspace for enabling UQ in non-equilibrium MD simulations.
+\vspace{2mm}
+
+\myitem Verified accuracy of a reduced-order surrogate against model predictions in a 
+probabilistic sense.
+\vspace{2mm}
+
+\myitem Demonstrated potential for dimension reduction using active subspaces
+to make UQ {\color{pigment}tractable} for atomistic simulations.
+
+\end{itemize}
+
+\end{frame}
+
+\end{document}
