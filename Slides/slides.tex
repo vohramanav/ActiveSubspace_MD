@@ -280,7 +280,7 @@ $^{\ddag}$North Carolina State University}
 
 \section{Active Subspaces}
 \subsection{ac}
-\begin{frame}[noframenumbering]{Background $\&$ Motivation} 
+\begin{frame}{Background $\&$ Motivation} 
 \normalsize
 \vspace{2mm}
 \begin{itemize}
@@ -333,6 +333,7 @@ f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
 
 %___________________________NEW SLIDE______________________________________
 
+\section{\scshape Application}
 \subsection{ac}
 \begin{frame}{Non-Equilibrium Molecular Dynamics} 
 \normalsize
@@ -389,8 +390,8 @@ f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
 \includegraphics[width=0.8\textwidth]{./Figures/schematic_md}
 \end{figure}
 \vspace{5mm}
-       \animategraphics[autoplay,poster=first,loop,height=0.60\textwidth]{5}
-       {./animation/snap}{0}{64}
+%       \animategraphics[autoplay,poster=first,loop,height=0.60\textwidth]{5}
+%       {./animation/snap}{0}{64}
 \end{center}
 \normalsize
 
@@ -401,8 +402,9 @@ f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
 
 %___________________________NEW SLIDE______________________________________
 
+\section{\scshape Results}
 \subsection{ac}
-\begin{frame}{Dimension Reduction: Active Subspaces} 
+\begin{frame}{Dimension Reduction} 
 \vspace{1mm}
 \scriptsize
 \begin{columns}
@@ -440,17 +442,19 @@ f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
 \dotfill
 
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 \vspace{-2mm}
 \begin{figure}[htbp]
-\includegraphics[width=0.7\textwidth]{./Figures/ssp1D_MD}
+\vspace{-5mm}
+\includegraphics[width=0.45\textwidth]{./Figures/ssp1D_MD}
+\includegraphics[width=0.58\textwidth]{./Figures/ssp2D}
 \end{figure}
 \end{column}
-\hspace{-18mm}
-\begin{column}{0.5\textwidth}
+\hspace{-12mm}
+\begin{column}{0.4\textwidth}
 \begin{figure}[htbp]
-\vspace{-2.5mm}
-\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP1D}
+\vspace{-2.0mm}
+\includegraphics[width=0.85\textwidth]{./Figures/pdf_comp_SSP3D}
 \end{figure}
 \end{column}
 \end{columns}
@@ -460,139 +464,65 @@ f(\bm{x}) &= g(w_1^\top x)~~~\text{\tiny{[P. Constantine, 2015]}}
 %___________________________NEW SLIDE______________________________________
 
 \subsection{ac}
-\begin{frame}[noframenumbering]{Dimension Reduction: Active Subspaces} 
-\vspace{1mm}
-\scriptsize
+\begin{frame}{Sensitivity Analysis} 
+
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-\myitem Positive semi-definite matrix:
-\vspace{-2mm}
-\be
-\begin{aligned}
-\mathcal{C} &= \int \nabla f(\bm{x})\nabla f(\bm{x})^{\top}\rho(\bm{x})d\bm{x} = \bm{W}\Lambda\bm{W}^\top \\
-&\approx \frac{1}{N}\sum_{i=1}^{N} \nabla_{\bm{x}}f_i\nabla_{\bm{x}}f_i^\top = 
-\hat{\bm{W}}\hat{\Lambda}\hat{\bm{W}}^{\top} \nonumber
-\end{aligned}
-\ee
-
-\myitem Partition of Eigenpairs:
-\vspace{-2mm}
-\begin{gather}
-\Lambda = 
-\begin{bmatrix}
-\Lambda_1 & \\ & \Lambda_2 \nonumber
-\end{bmatrix},~~\bm{W} = \left[\bm{W}_1~\bm{W}_2\right]
-\end{gather}
-\end{itemize}
-
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\begin{figure}[htbp]
-\includegraphics[width=0.7\textwidth]{./Figures/eig_MD}
-\end{figure}
-\end{column}
-\end{columns}
-\vspace{2mm}
-\dotfill
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\vspace{-2mm}
-\begin{figure}[htbp]
-\includegraphics[width=0.75\textwidth]{./Figures/ssp2D}
-\end{figure}
-\end{column}
-\hspace{-18mm}
-\begin{column}{0.5\textwidth}
-\begin{figure}[htbp]
-\vspace{-2.5mm}
-\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP2D}
-\end{figure}
-\end{column}
-\end{columns}
-
-\end{frame}
-
-%___________________________NEW SLIDE______________________________________
-
-\subsection{ac}
-\begin{frame}[noframenumbering]{Dimension Reduction: Active Subspaces} 
-\vspace{1mm}
+\myitem Sobol total effect index
 \scriptsize
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{itemize}
-\myitem Positive semi-definite matrix:
-\vspace{-2mm}
-\be
-\begin{aligned}
-\mathcal{C} &= \int \nabla f(\bm{x})\nabla f(\bm{x})^{\top}\rho(\bm{x})d\bm{x} = \bm{W}\Lambda\bm{W}^\top \\
-&\approx \frac{1}{N}\sum_{i=1}^{N} \nabla_{\bm{x}}f_i\nabla_{\bm{x}}f_i^\top = 
-\hat{\bm{W}}\hat{\Lambda}\hat{\bm{W}}^{\top} \nonumber
-\end{aligned}
-\ee
+\begin{align}
+\mathcal{T}(\theta_i) &= 
+1 - \frac{\mathbb{V}_{\bm{\theta}_{\sim i}}(\mathbb{E}_{\theta_i}[\mathcal{G}\vert\bm{\theta}_{\sim i}])}{\mathbb{V}(\mathcal{G})} \nonumber \\ \vspace{1mm}
+&= \frac{\frac{1}{N}\sum\limits_{k=1}^{N}f(\bm{A})_k(f(\bm{A})_k - f(\bm{A_B}^i)_k)}{\mathbb{V}(\mathcal{G})} \nonumber
+\end{align}
 
-\myitem Partition of Eigenpairs:
-\vspace{-2mm}
-\begin{gather}
-\Lambda = 
-\begin{bmatrix}
-\Lambda_1 & \\ & \Lambda_2 \nonumber
-\end{bmatrix},~~\bm{W} = \left[\bm{W}_1~\bm{W}_2\right]
-\end{gather}
+\begin{itemize}
+\scriptsize
+\item $\bm{A}$, $\bm{B}$: Matrices comprising independent samples of $\bm{\theta}$.  \vspace{2mm}
+\item $\bm{A_B}^i$: $i^{\text{th}}$ column of A is replaced by the  $i^{\text{th}}$ column of $\bm{B}$.
 \end{itemize}
 
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\begin{figure}[htbp]
-\includegraphics[width=0.7\textwidth]{./Figures/eig_MD}
-\end{figure}
-\end{column}
-\end{columns}
-\vspace{2mm}
-\dotfill
-
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\vspace{-2mm}
-\begin{figure}[htbp]
-\includegraphics[width=0.75\textwidth]{./Figures/ssp2D}
-\end{figure}
-\end{column}
-\hspace{-18mm}
-\begin{column}{0.5\textwidth}
-\begin{figure}[htbp]
-\vspace{-2.5mm}
-\includegraphics[width=0.8\textwidth]{./Figures/pdf_comp_SSP3D}
-\end{figure}
-\end{column}
-\end{columns}
-
-\end{frame}
-
-%___________________________NEW SLIDE______________________________________
-
-\subsection{ac}
-\begin{frame}{Key Contributions} 
 \normalsize
-
-\begin{itemize}
-
-\myitem Discovered an active subspace for enabling UQ in non-equilibrium MD simulations.
-\vspace{2mm}
-
-\myitem Verified accuracy of a reduced-order surrogate against model predictions in a 
-probabilistic sense.
-\vspace{2mm}
-
-\myitem Demonstrated potential for dimension reduction using active subspaces
-to make UQ {\color{pigment}tractable} for atomistic simulations.
+\vspace{3mm}
+\myitem Activity scores
+\vspace{-2mm}
+\scriptsize
+\be
+\eta_i(n) = \sum\limits_{j=1}^n \lambda_jw_{i,j}^2 \nonumber
+\ee
 
 \end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+
+\begin{figure}[htbp]
+\includegraphics[width=0.8\textwidth]{./Figures/gsa_subspace}
+\\ \vspace{2mm}
+\includegraphics[width=0.8\textwidth]{./Figures/activity_scores}
+\end{figure}
+
+\end{column}
+\end{columns}
 
 \end{frame}
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
