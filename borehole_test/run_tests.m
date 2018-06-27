@@ -23,7 +23,7 @@ plot(W(:,1), '-*', 'linewidth',2);
 legend('alg 1.1', 'alg 1.2');
 set(gca, 'fontsize', 20);
 title('comparing dominant eigenvectors');
-
+print -dpng vector_comp.png
 
 % compare normalized eigenvalues
 l1 = lambda_grad./lambda_grad(1);
@@ -35,4 +35,5 @@ title('comparing eigenvalues');
 set(gca, 'yscale', 'log');
 set(gca, 'fontsize', 20);
 legend('alg 1.1', 'alg 1.2');
+print -dpng val_comp.png
 
