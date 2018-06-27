@@ -1,6 +1,6 @@
 m = 7;
 k = m + 1;
-alpha = 4;
+alpha = 8;
 rng(1245);
 nsamples = floor(alpha * k * log(m));
 
@@ -25,7 +25,7 @@ C = C / nsamples;
 V = V(:,idx);
 
 figure
-semilogy(lambda_grad./lambda_grad(1), '-o');
+semilogy(abs(lambda_grad)./lambda_grad(1), '-o');
 set(gca, 'fontsize', 20);
 title('grad based eigs');
 
