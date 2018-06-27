@@ -1,7 +1,7 @@
 m = 7;
 k = m + 1;
 alpha = 8;
-rng(1245);
+rng(123);
 nsamples = floor(alpha * k * log(m));
 
 x = -1 + 2 * rand(nsamples, m);
