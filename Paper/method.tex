@@ -1,2 +1,13 @@
 \section{Methodology}
 \label{sec:method}
+
+As mentioned earlier in section~\ref{sec:intro}, the gradient-free approach is used in this work
+to compute the active subspace for enabling efficient propagation of the uncertainty from SW
+parameters to thermal conductivity estimates based on NEMD simulations. The gradient-free
+approach yields a computational advantage by not relying on model evaluations for estimating
+the gradients required for estimating $\hat{\mat{C}}$ in~\eqref{eq:chat}. 
+Instead, it involves a regression-based local linear approximation of the model output as
+discussed in~\cite{Constantine:2015} (Algorithm 1.2). In this work, however, we implement the
+gradient-free approach in an iterative manner to avoid extraneous model evaluations once
+convergence of $\hat{\mat{C}}$ has been established as discussed further below. 
+

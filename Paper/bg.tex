@@ -58,23 +58,115 @@ Inter-atomic Potential & Stillinger-Weber \\
 \label{tab:input}
 \end{table}
  
-As illustrated in the following flow diagram, there are three stages involved in the NEMD simulation: NVT, NVE (I), and
-NVE (II); NVT and NVE are thermodynamic ensembles used commonly in NEMD simulations. We have used
+As illustrated in the following flow diagram, there are four stages involved in the NEMD simulation: 
+NPT, NVT, NVE (I), and
+NVE (II); NPT, NVT and NVE are thermodynamic ensembles used commonly in NEMD simulations. We have used
 (I) and (II) here to distinguish between the two NVE ensembles. 
 %
 \begin{center}
-NVT \hspace{5mm} $\rightarrow$ \hspace{5mm} NVE (I) \hspace{5mm}
+
+NPT \hspace{5mm} $\rightarrow$ \hspace{5mm} NVT \hspace{5mm} $\rightarrow$ \hspace{5mm} NVE (I) \hspace{5mm}
 $\rightarrow$ \hspace{5mm} NVE (II)
 \\ \vspace{1mm}
-\tiny \hspace{-5mm}[Equilibrate system to 300 K] \hspace{1mm} [Equilibrate thermostats] \hspace{4mm}
+\tiny [Relax the system]~[Equilibrate system to 300 K] \hspace{1mm} [Equilibrate thermostats] \hspace{4mm}
  [Generate Data]
 \\ \vspace{1mm}
-\tiny{N: Number of Atoms~~~V: Volume~~~T: Temperature~~~E: Energy}
+
+\tiny{N: Number of Atoms~~~P: Pressure~~~V: Volume~~~T: Temperature~~~E: Energy}
 \end{center}
+
 %
-During the NVT stage, the system is equilibrated to a specific bulk temperature at which the thermal conductivity
-of the bar is to be estimated. The NVE (I) stage involves equilibration of the thermostats at specified temperatures.
-Lastly, during the NVE (II) stage, the trajectory of individual atoms during simulation is recorded.
+Initially, our NEMD simulation set-up did not comprise an NPT ensemble. However,
+since computing the active subspace involves pseudorandom sampling of the marginal distributions
+of the SW potential parameters, we observed that the structual integrity of the Si bar was lost for
+certain set of parameter values. To circumvent this challenge, an NPT ensemble was run
+(for a sufficiently long time), prior to the NVT ensemble to ensure that the system relaxes to a 
+steady value of the bar length as discussed in~\cite{Vohra:2018a}.
+During the NVT stage, the system is equilibrated to a specific bulk temperature at which the thermal
+conductivity of the bar is to be estimated. The NVE (I) stage involves equilibration of the thermostats
+at specified temperatures. Lastly, during the NVE (II) stage, the trajectory of individual atoms during
+simulation is recorded.
 
 \subsection{Active Subspace}
 \label{sub:as}
+
+As mentioned earlier in section~\ref{sec:intro}, the active subspace is a low-dimensional space in the
+input domain that sufficiently captures the variability in the QoI~\cite{Constantine:2015}.
+Uncertain model inputs, $\bm{\theta}$, are parameterized as canonical random variables, 
+$\bm{\xi}\in\Omega\in\mathbb{R}^{N_\theta}$, where $N_{\theta}$ denotes the number of uncertain inputs. 
+Pseudorandom samples are generated according the joint probability distribution of $\xi_i$'s ($\pi_\vec\xi$).
+The samples are then projected back to the physical space to evaluate the model output, $G$. The
+active subspace is spanned by the dominant eigenvectors of a symmetric and positive semidefinite matrix,
+$\mat{C}$:
+%
+\be
+\mat{C} = \int_\Omega (\nabla_{\vec{\xi}}G)(\nabla_{\vec{\xi}}G)^\top dP_\vec\xi, 
+\label{eq:C}
+\ee
+%  
+where $dP_\vec\xi$ = $\pi_\vec\xi d\vec\xi$. Note that $G$ is assumed to differentiable in the considered
+input domain. Additionally, $G$ and its partial derivatives in~\eqref{eq:C} are assumed to be L-2 
+integrable. Consider the eigenvalue decomposition of $\mat{C}$:
+%
+\be
+\mat{C} = \mat{W}\mat{\Lambda}\mat{W}^\top.
+\ee
+%
+where $\mat{\Lambda}$ = diag($\lambda_1,\ldots,\lambda_\Nt$) with $\lambda_i$'s sorted in
+descending order:
+\[
+     \lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_\Nt \geq 0.
+\] 
+%
+The matrix, $\mat{W}$ comprises orthonormal eigenvectors as its columns. The eigenpairs are partitioned
+about the $p^{th}$ eigenvalue such that, \scalebox{1.25}{$\left(\frac{\lambda_p}{\lambda_{p+1}}\right)$}$\gg 1$
+as follows:
+%
+\be
+ \mat{W} = [\mat{W}_1~\mat{W}_2],~~\mat{\Lambda} = \begin{bmatrix}\mat{\Lambda}_1 & \\  &
+  \mat{\Lambda}_2. 
+\end{bmatrix}
+\ee
+%
+The column space of $\mat{W}_1$ constitutes the dominant eigenspace of $\mat{C}$, and define the
+active subspace, and $\mat{\Lambda}_1$ is the corresponding diagonal matrix with 
+$\{\lambda_1,\ldots,\lambda_p\}$ as its entries. Dimension reduction is accomplished by transforming the
+model output, $G(\vec\xi)$ (a function of $\Nt$ independent inputs) into $\mathcal{Y}(\vec\eta)$, a
+function of $p$ independent inputs, where $\vec\eta$ = $\mat{W}_1^\top \vec\xi\in\mathbb{R}^p$, 
+is referred to as the set of \textit{active variables}. Computational effort associated with UQ
+is hence reduced by means of dimension reduction. However, to further decrease computational effort,
+we approximate $\mathcal{Y}$ using a surrogate, $\tilde{\mathcal{Y}}$ using the sequence of steps
+provided in~\cite{Constantine:2015} (chapter 4), and outlined below in Algorithm~\ref{alg:surr}.
+\bigskip
+\begin{breakablealgorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+  \caption{Algorithm for constructing the surrogate model, $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec\xi)$}
+  \begin{algorithmic}[1]
+	\Procedure{Surrogate Model, $\tilde{\mathcal{Y}}$}{} 
+	  \State Consider $N$ available data points in the full space, $(\vec\xi_i,G(\vec\xi_i))$, $i~=~1,\ldots,N$
+	  \State For each $\vec\xi_i$, compute $\vec\eta_i$ = $\mat{W}_1^\top\vec\xi_i$ 
+          (Note: $\mathcal{Y}(\vec{\eta}_i)$ $\approx$ $G(\vec{\xi}_i)$)
+	  \State Fit a regression surface, $\tilde{\mathcal{Y}}$ to approximate $\mathcal{Y}$ using the data
+                 points, $(\vec\xi_i,Y(\vec\eta_i))$
+	  \State Note that the overall approximation is: $G(\vec{\xi})$ $\approx$
+                 $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec{\xi})$ 
+	\EndProcedure
+  \end{algorithmic}
+  \label{alg:surr}
+\end{breakablealgorithm}
+\bigskip
+
+In practice, the matrix, $\mat{C}$ is numerically approximated using model gradient estimates at random samples
+in the input space as follows:
+ %
+ \be
+ \mat{C}\approx \hat{\mat{C}} = \frac{1}{N}\sum\limits_{i=1}^{N} 
+ (\nabla_{\vec{\xi}}G(\vec{\xi}_i))(\nabla_{\vec{\xi}}G(\vec{\xi}_i))^\top
+ = \hat{\mat{W}}\hat{\mat{\Lambda}}\hat{\mat{W}}^\top.
+\label{eq:chat}
+ \ee
+ %
+Hence, the computational effort required for constructing $\hat{\mat{C}}$ scales with the number of samples, $N$.
+To avoid excessive number of model evaluations and hence optimize the computational effort, the gradient-free
+approach for computing the active subspace is employed in an iterative manner as discussed in the following section. 
