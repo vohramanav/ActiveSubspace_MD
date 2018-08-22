@@ -7,4 +7,156 @@
 %4. How we tried to address the challenge in our previous work.
 %5. How is this work different?
 %6. Key contributions.
-%7. Organization of the paper. 
+%7. Organization of the paper.
+
+Non-equilibrium molecular dynamics (NEMD) simulations are commonly used to investigate
+bulk thermal conductivity of non-metallic elements such as carbon, silicon, and
+germanium~\cite{Dumitrica:2010}. The system is subjected to either a heat flux or a temperature
+gradient by means of thermostatting. Resulting steady-state temperature gradient in the
+former and heat exchange between the thermostats in the latter is recored. The thermal
+conductivity at a given system size is hence estimated using Fourier's law. In the
+so-called direct method~\cite{Schelling:2002,Turney:2009,Zhou:2009,Landry:2009,
+McGaughey:2006,Ni:2009,Shi:2009,Wang:2009,Papanikolaou:2008},
+the thermal conductivity is estimated at multiple values of the
+system size. The inverse of thermal conductivity ($\kappa^{-1}$) is plotted against the inverse of 
+system size ($L^{-1}$) and a linear extrapolation procedure is used to estimate the y-intercept
+of the plot. Inverse of the y-intercept is regarded as the bulk thermal conductivity
+of the system since it corresponds to an infinitely large system (in theory). 
+
+Although widely used, severe limitations are associated with the direct method.
+The validity of the linear extrapolation procedure is not well established. Recent
+investigations have revealed the existence of a non-linear trend in the $\kappa^{-1}$-$L^{-1}$
+relationship especially at large values of $L$~\cite{Sellan:2010} for Si. Additionally, 
+thermal conductivity estimate for a given size depends upon the choice of a potential
+function and associated values of its parameters. Specifically for Si, the Stillinger-Weber (SW)
+inter-atomic potential is commonly used for a wide variety of applications:
+%
+\be
+\Phi = \sum\limits_{i,j(i<j)}\phi_2(A,B,p,q,\alpha)\hspace{1mm}+\sum\limits_{i,j,k(i<j<k)}\phi_3(\lambda,\gamma)
+\ee
+%
+However, according
+to the methodology presented by Stillinger and Weber in~\cite{Stillinger:1985},
+the following shortcomings must be noted:
+%
+\begin{itemize}
+\item The SW potential function accounts for the second-order ($\phi_2$) and
+third-order ($\phi_3$) atomic 
+interactions. However, this representation can be inadequate in situations where 
+higher order interactions become significant.  
+\item Nominal values of the SW potential parameters were estimated using a 
+limited search in a 7-dimensional parameter space. Regression-based parameter
+estimates relied on the available set of experimental data while ensuring structural
+stability. Hence, the estimates are tightly coupled with the set of data used for
+calibration, and did not account for the presence of measurement uncertainty. 
+\item Noise inherent in MD predictions can also be significant and
+was not accounted for in the analysis. 
+\end{itemize}
+%
+Hence, using the same set of nominal values for a wide range of Si-based systems and
+applications is not ideal. It is therefore important to attribute uncertainty to the values and
+investigate its impact on NEMD predictions. 
+
+This paper aims to present a computational framework aimed at dimension reduction
+for enabling the propagation of uncertainty from the SW potential parameters to the
+quantity of interest (QoI) i.e. the thermal conductivity of a Si bar in an efficient manner. The
+motivation for input-space dimension reduction stems from exponential scaling in
+computational effort with the number of parameters, illustrated using the following
+table:
+%
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\begin{table}[htbp]
+\centering
+\ra{1.3}
+\begin{tabular}{@{}ccc@{}}\toprule
+Parameters & Model Runs & Time (1h/run)\\
+\bottomrule
+1 & 10 & 10 hours \\
+2 & 10$^2$ & 4.2 days \\
+3 & 10$^3$ & 1.4 months \\
+4 & 10$^4$ & 1.2 years \\
+5 & 10$^5$ & 11.6 years \\
+6 & 10$^6$ & 115.7 years \\
+7 & 10$^7$ & 1157.41 years \\
+\bottomrule
+\end{tabular}
+\caption{Exponential scaling of computational effort with the number of uncertain parameters.}
+\end{table}
+%
+In the above table, we consider that in order to perform UQ, an average of 10 runs along each input dimension
+is needed, and each run takes approximately an hour. We can easily compute that the time required to 
+perform the analysis in a 7-dimensional input space is in the $\mathcal{O}(10^3)$ years which makes it
+intractable. Note that the considered compute times do not account for simulation queue times that 
+increases the time required for a run. 
+Although computational gains can be realized using parallel computations and sparse grids
+for efficient surrogate construction~\cite{Ma:2009,Constantine:2012,Petvipusit:2014,Vohra:2014}, 
+the issue of exponential scaling would persist.  
+Hence, we aim to tackle this issue by focussing our efforts on reducing the dimensionality of the problem
+which is expect to yield maximum gains. In our earlier efforts, we presented a strategy~\cite{Vohra:2018b}
+for constructing a surrogate for thermal conductivity using NEMD predictions and their dependence
+on the SW potential parameters in a reduced space, evaluated using the derivative-based global sensitivity measures
+(DGSMs)~\cite{Vohra:2018a}. The focus was therefore on determining the relative importance of the
+parameters and fixing the unimportant parameters at their nominal values. On the other hand, the
+framework presented in this study aims to identify key directions in the input space along which the
+QoI predominantly varies. The set of directions constitute the so-called 
+\textit{active subspace}~\cite{Constantine:2015}.  
+
+The active subspace methodology relies on estimating the partial derivative of the QoI 
+with respect to each uncertain input. This requirement poses a couple of limitations on its
+applicability: (1) The QoI is required to be differentiable in the considered input domain, and (2)
+In most complex problems, the derivative needs to be approximated using numerical techniques
+which require model evaluations and thus impose computational burden. Fortunately, in this case,
+the thermal conductivity is observed to exhibit a smooth dependence on the SW parameters. 
+To mitigate the challenge pertaining to derivative estimation, we exploit our recent experience
+involving the application of a gradient-free approach for evaluating the active subspace in
+chemical kinetics applications~\cite{Vohra:2018c}. In this approach, the gradient is estimated
+using a regression-based local linear approximation of the QoI and hence does not require
+model evaluations. It was shown in~\cite{Vohra:2018c} that the gradient-free approach is
+remarkably accurate is estimate the mean and the mode value of the uncertain QoI. However,
+it did not fully capture the sensitivity associated with all uncertain inputs. Since our focus
+in this study is on uncertainty propagation from inputs to the QoI, the gradient-free approach
+seems like a suitable choice considering the computational effort associated with model 
+evaluation for thermal conductivity of a Si bar. In fact, our findings reveal the existence of a 
+1-dimensional active subspace in this case indicating enormous scope for computational savings.
+Moreover, the global sensitivity measures based
+on the active subspace are found to be consistent with our earlier estimates based on DGSMs. 
+
+The remainder of this article is organized as follows. In section~\ref{sec:bg}, we provide details
+pertaining to the NEMD simulation in \ref{sub:nemd}, and brief background on active subspaces
+in~\ref{sub:as}. Details pertaining to the computational methodology are
+provided in section~\ref{sec:method}. Results based on the active subspace methodology
+implemented including verification of the reduced-space surrogate, and sensitivity analysis
+are presented in section~\ref{sec:results}. Finally, we draw useful conclusions based on this
+work in section~\ref{sec:conc}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
