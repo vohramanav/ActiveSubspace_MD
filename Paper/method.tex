@@ -11,3 +11,69 @@ discussed in~\cite{Constantine:2015} (Algorithm 1.2). In this work, however, we 
 gradient-free approach in an iterative manner to avoid extraneous model evaluations once
 convergence of $\hat{\mat{C}}$ has been established as discussed further below. 
 
+We begin by generating an initial set ($n_0$) of random samples in the full space input domain
+and evaluating the model output at these samples. Note that the samples are generated
+according to the joint probability distribution of the canonical random variables
+($\vec\xi$), $\pi_\vec\xi$. An independent set of $M$ samples is also generated from $\pi_\vec\xi$
+using Monte Carlo sampling. For each samples in $M$, a least-squares fit to $s$ nearest neighbors in
+$n_0$ is performed. The slope vector ($\vec{d}_i$) of the linear regression-fit is estimated and recorded.
+The procedure for estimating $\vec{d}_i$ is referred to as local linear approximation and the underlying steps
+are outlined in the following algorithm. 
+%
+\bigskip
+\begin{breakablealgorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+  \caption{For constructing the matrix, $\hat{\mat{C}}$ in~\eqref{eq:chat}}
+  \begin{algorithmic}[1]
+	\Procedure{Local Linear Approximation}{} 
+	\State Draw $N$ random samples, $\{\bm{\xi}_j\}_{j=1}^{N}$ 
+	according to $\pi_{\bm{\xi}}$.
+	\State Compute $G(\bm\xi_j)$, $j=1, \ldots, N$.
+	\State Draw $M$ random samples, $\{\bm{\zeta}_i\}_{i=1}^{M}$
+	according to $\pi_{\bm{\xi}}$.
+	\State Choose an integer $s \leq N$ 
+	\State For each $i=1, \ldots, M$, compute 
+	\[
+	\begin{aligned}
+	\Phi_i &= \{ p \text{ nearest points in } \{\bm{\xi}_j\}_{j=1}^{N} \text{ to } \bm{\zeta}_i\}\\
+	\vspace{-2mm}
+	\Psi_i &= \text{subset of } G(\bm\xi_j) \text{ corresponding to the points in } \Phi_i\\
+	\vspace{-2mm}
+	 &{\color{white}=} \hspace{-7mm} \text{Least-squares fit:~} 
+	 G(\bm\xi_j) \approx c_i + \vec{d}_i^T\bm{\xi}_j,  \bm{\xi}_j \in \Phi_i, G(\bm\xi_j) \in \Psi_i\\
+	 \vspace{-2mm}
+	  &{\color{white}=} \hspace{-7mm}\text{Record the slope vector,}~\vec{d}_i
+	\end{aligned}
+	\]
+	\State Compute the matrix, $\hat{\mat{C}}$:
+	\[
+	\hat{\mat{C}} \approx \frac{1}{M} \sum_{i=1}^{M} \vec{d}_i\vec{d}_i^T = \hat{\mat{W}}\hat{\mat{\Lambda}}\hat{\mat{W}}^\top
+	\]
+	\EndProcedure
+  \end{algorithmic}
+  \label{alg:lla}
+\end{breakablealgorithm}
+\bigskip
+
+An initial estimate of the symmetric positive semidefinite matrix, $\hat{\mat{C}}$ 
+and the corresponding eigenspace is hence computed as follows:
+%
+\be
+\hat{\mat{C}} = \frac{1}{M}\sum\limits_{i=1}^{M}\bm{d}_i\bm{d}_i^\top = \hat{\bm{W}}\hat{\bm{\Lambda}}\hat{\bm{W}}^\top
+\ee
+%
+At each subsequent iteration, a new set of Monte Carlo samples is generated followed by implementation of the
+ local linear approximation procedure on the enriched set of model evaluations to obtain an improved estimate of
+ $\hat{\mat{C}}$ and its eigenspace. The improved eigenspace is partitioned as discussed earlier in~\ref{sub:as}
+ to obtain the active subspace. For a given eigenvector ($j^{th}$) in the active subspace, we compute the relative L-2 
+ norm of the difference in squared values of corresponding components ($\varepsilon_j^k$) of the same eigenvector,
+ computed during successive iterations (iterations $k$ and $k-1$). The quantity, $\varepsilon_j^k$ is recorded for
+ each eigenvector in the active subspace. Convergence is accomplished once the maximum value of $\varepsilon_j^k$
+ is below a given tolerance, $\tau$.
+ 
+
+
+
+
+

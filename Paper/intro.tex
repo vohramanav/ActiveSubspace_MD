@@ -111,10 +111,10 @@ the thermal conductivity is observed to exhibit a smooth dependence on the SW pa
 To mitigate the challenge pertaining to derivative estimation, we exploit our recent experience
 involving the application of a gradient-free approach for evaluating the active subspace in
 chemical kinetics applications~\cite{Vohra:2018c}. In this approach, the gradient is estimated
-using a regression-based local linear approximation of the QoI and hence does not require
-model evaluations. It was shown in~\cite{Vohra:2018c} that the gradient-free approach is
-remarkably accurate is estimate the mean and the mode value of the uncertain QoI. However,
-it did not fully capture the sensitivity associated with all uncertain inputs. Since our focus
+using a regression-based \textit{local linear approximation} of the QoI and hence does not require
+model evaluations. It was shown in~\cite{Vohra:2018c} that the gradient-free approach
+led to a reasonably accurate estimation of the mean, mode, and the uncertainty in the QoI.
+However, it did not fully capture the sensitivity associated with all uncertain inputs. Since our focus
 in this study is on uncertainty propagation from inputs to the QoI, the gradient-free approach
 seems like a suitable choice considering the computational effort associated with model 
 evaluation for thermal conductivity of a Si bar. In fact, our findings reveal the existence of a 
