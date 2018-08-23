@@ -36,7 +36,7 @@ are outlined in the following algorithm.
 	\State For each $i=1, \ldots, M$, compute 
 	\[
 	\begin{aligned}
-	\Phi_i &= \{ p \text{ nearest points in } \{\bm{\xi}_j\}_{j=1}^{N} \text{ to } \bm{\zeta}_i\}\\
+	\Phi_i &= \{ s \text{ nearest points in } \{\bm{\xi}_j\}_{j=1}^{N} \text{ to } \bm{\zeta}_i\}\\
 	\vspace{-2mm}
 	\Psi_i &= \text{subset of } G(\bm\xi_j) \text{ corresponding to the points in } \Phi_i\\
 	\vspace{-2mm}
@@ -60,20 +60,116 @@ An initial estimate of the symmetric positive semidefinite matrix, $\hat{\mat{C}
 and the corresponding eigenspace is hence computed as follows:
 %
 \be
-\hat{\mat{C}} = \frac{1}{M}\sum\limits_{i=1}^{M}\bm{d}_i\bm{d}_i^\top = \hat{\bm{W}}\hat{\bm{\Lambda}}\hat{\bm{W}}^\top
+\hat{\mat{C}} = \frac{1}{M}\sum\limits_{i=1}^{M}\bm{d}_i\bm{d}_i^\top = \hat{\bm{W}}\hat{\bm{\Lambda}}\hat{\bm{W}}^\top.
 \ee
 %
 At each subsequent iteration, a new set of Monte Carlo samples is generated followed by implementation of the
  local linear approximation procedure on the enriched set of model evaluations to obtain an improved estimate of
  $\hat{\mat{C}}$ and its eigenspace. The improved eigenspace is partitioned as discussed earlier in~\ref{sub:as}
- to obtain the active subspace. For a given eigenvector ($j^{th}$) in the active subspace, we compute the relative L-2 
+ to obtain the active subspace. For a given eigenvector ($j^{th}$) in the active subspace, 
+ we compute the relative L-2 
  norm of the difference in squared values of corresponding components ($\varepsilon_j^k$) of the same eigenvector,
- computed during successive iterations (iterations $k$ and $k-1$). The quantity, $\varepsilon_j^k$ is recorded for
- each eigenvector in the active subspace. Convergence is accomplished once the maximum value of $\varepsilon_j^k$
- is below a given tolerance, $\tau$.
- 
+ computed during successive iterations (iterations $k$ and $k-1$) as follows:
+%
+\be
+\varepsilon_j^k = \frac{\|(\hat{\mat{W}}_{1,j}^{k})^2 - 
+                       (\hat{\mat{W}}_{1,j}^{k-1})^2\|_2}{\|(\hat{\mat{W}}_{1,j}^{k-1})^2\|_2}, 
+                       j = 1,\ldots,p,
+\label{eq:conv}
+\ee
+%
+where $p$ denotes the dimension of the column space of $\mat{W}_1$ or the number of eigenvectors in
+the active subspace.
+The quantity, $\varepsilon_j^k$ is recorded as the $j^{th}$ component of $\vec\varepsilon^k$. Convergence is
+established once the component with the highest magnitude is below a given tolerance, $\tau$.
 
+It has been shown that the components of the eigenvectors in the active subspace can be used for global
+sensitivity analysis (GSA) by estimating the so-called 
+\textit{activity scores}~\cite{Diaz:2016,Constantine:2017,Vohra:2018c}. Specifically, in~\cite{Vohra:2018c},
+it was shown that the activity scores provide a means for approximating the DGSMs and hence the upper bound
+on the total Sobol' sensitivity index. The activity score, $\nu_i$ for the $i^{th}$ uncertain
+input can be computed using the following expression:
+%
+\be
+\nu_{i,p}(G) = \sum\limits_{j=1}^{p} \Lambda_j w_{i,j}^2, i=1,\ldots,\Nt.
+\label{eq:ac}
+\ee
+%
+A more robust measure is the normalized activity score to ensure
+that its value remains between 0 and 1:
+%
+\be
+\tilde{\nu}_{i,p}(G) = \scalebox{1.25}{$\frac{\nu_{i,p}(G)}{\sum_i\nu_{i,p}(G)}$}.
+\label{eq:nac}
+\ee
+%
 
-
-
+The sequence of steps for computing the active subspace using the gradient-free approach are outlined
+below in Algorithm~\ref{alg:free}.
+\bigskip
+\begin{breakablealgorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+  \caption{An iterative gradient-based approach for discovering the active subspace}
+  \begin{algorithmic}[1]
+\Require $\tau$
+\Ensure $\hat{\mat{\Lambda}}$, $\hat{\mat{W}}$, $\bm{\nu}_p(G)$ %$\eta$. %
+    \Procedure{Gradient-free}{}
+    \State Set $k$ = 0
+	\State Draw $n_k$ random samples, $\{\bm{\xi}_i\}_{i=1}^{n_k}$ 
+         according to $\pi_{\bm{\xi}}$. 
+    \State Set $N_\text{total}$ = $n_k$ 
+	\State For each $i=1, \ldots, N_\text{total}$, compute
+		\[
+		\begin{aligned}
+	          &{\color{white}=} G(\bm{\xi}_i)~\text{and}~\bm{g}^i = \nabla_{\bm{\xi}}G(\bm{\xi}_i)
+		 \text{using~Algorithm~\ref{alg:lla}}
+		\end{aligned}
+		\]
+	\State Compute $\hat{\mat{C}}$ and its eigenvalue decomposition:
+		\[
+		\begin{aligned} 
+		  \hat{\mat{C}} &= \frac{1}{N_\text{total}}\sum\limits_{i=1}^{N_\text{total}}[\bm{g}^i][\bm{g}^i]^\top 
+		  &= \hat{\mat{W}}^{(k)}\hat{\mat{\Lambda}}^{(k)} \hat{\mat{W}}^{(k)\top}
+		\end{aligned}
+		\]
+	\State Partition the eigenpairs:
+	\[
+		\begin{aligned}
+		 \hat{\mat{\Lambda}}^{(k)}=
+        	\begin{bmatrix} \hat{\mat{\Lambda}}_1^{(k)} & \\ & \hat{\mat{\Lambda}}_2^{(k)} \end{bmatrix}, 
+        	\hat{\mat{W}}^{(k)}=\begin{bmatrix} \hat{\mat{W}}_1^{(k)} & \hat{\mat{W}}_2^{(k)} \end{bmatrix}, 
+        	\hat{\mat{\Lambda}}_1^{(k)}\in \mathbb{R}^{N_p\times p}
+		\end{aligned}
+	\]
+	\Loop
+		\State Set $k$ = $k$ + 1
+		\State Draw $n_k =  \lceil\beta n_{k-1}\rceil$  new samples 
+                $\{\bm{\xi}_i\}_{i=1}^{n_k}$  $\beta\in[0,1]$
+                
+%	%	\State Project $\bm{\xi}_k$~$\rightarrow$~$\bm{\theta}_k$.%
+		\State Set $N_\text{total}$ = $N_\text{total}$ + $n_k$ 
+		\State Compute $\bm{g}^i = \nabla_{\bm{\xi}_i}G(\bm{\xi}_i)$, 
+             	$i=n_{k-1}+1, \ldots, n_{k-1}+n_k$ using Algorithm~\ref{alg:lla} 
+		\State Compute $\hat{\mat{C}}$ and its eigenvalue decomposition (see Step 6)
+		\State Partition the eigenspace of $\hat{\mat{C}}$ as shown in Step 7 
+		\State Compute, $\vec\varepsilon^k$ using~\eqref{eq:conv} 
+		\If {$\max\left(\vec\varepsilon^k\right)<\tau$}
+			\State break
+		\EndIf
+       \EndLoop
+	\State Compute the normalized activity scores, $\tilde{\nu}_{i,p}(G)$ using~\eqref{eq:ac} and~\eqref{eq:nac}
+    \EndProcedure
+  \end{algorithmic}
+  \label{alg:free}
+\end{breakablealgorithm}
+\bigskip
+%
+Note the same sequence of steps is followed when using the gradient-based approach for computing the
+active subspace. The distinction between the two approaches essentially lies in the estimation of
+the gradient of the model output. As opposed to local linear approximation, the gradient-based
+approach relies on numerical techniques such as finite differences and hence requires model evaluations
+for computing the gradient. While additional model runs increase the computational effort in this case,
+the gradient-based approach is expected to be more robust depending upon the application. For the present
+application, model runs are expensive and therefore the gradient-based approach quickly becomes prohibitive.
 
