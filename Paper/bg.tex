@@ -36,7 +36,7 @@ thermal conductivity of the Si bar using Fourier's law:
  \kappa = \frac{q}{\left|\frac{dT}{dz}\right|} 
 \ee
 %
-where $\left|\frac{dT}{dz}\right|$ denotes the magnitude of the applied thermal gradient. In table~\ref{tab:input},
+where $\left|\frac{dT}{dz}\right|$ denotes the magnitude of the applied thermal gradient. In Table~\ref{tab:input},
 we provide the set of inputs used to perform the NEMD simulation. Note that the simulation run length, width, 
 and height were selected to minimize temperature fluctuations during the different stages of the simulation while
 ensuring a reasonable computational effort. 
@@ -74,11 +74,10 @@ $\rightarrow$ \hspace{5mm} NVE (II)
 
 \tiny{N: Number of Atoms~~~P: Pressure~~~V: Volume~~~T: Temperature~~~E: Energy}
 \end{center}
-
 %
 Initially, our NEMD simulation set-up did not comprise an NPT ensemble. However,
 since computing the active subspace involves pseudorandom sampling of the marginal distributions
-of the SW potential parameters, we observed that the structual integrity of the Si bar was lost for
+of the SW potential parameters, it was observed that the structural integrity of the Si bar was lost for
 certain set of parameter values. To circumvent this challenge, an NPT ensemble was run
 (for a sufficiently long time), prior to the NVT ensemble to ensure that the system relaxes to a 
 steady value of the bar length as discussed in~\cite{Vohra:2018a}.
@@ -128,14 +127,14 @@ as follows:
 \end{bmatrix}
 \ee
 %
-The column space of $\mat{W}_1$ constitutes the dominant eigenspace of $\mat{C}$, and define the
+The column space of $\mat{W}_1$ constitutes the dominant eigenspace of $\mat{C}$, regarded as the
 active subspace, and $\mat{\Lambda}_1$ is the corresponding diagonal matrix with 
 $\{\lambda_1,\ldots,\lambda_p\}$ as its entries. Dimension reduction is accomplished by transforming the
 model output, $G(\vec\xi)$ (a function of $\Nt$ independent inputs) into $\mathcal{Y}(\vec\eta)$, a
 function of $p$ independent inputs, where $\vec\eta$ = $\mat{W}_1^\top \vec\xi\in\mathbb{R}^p$, 
 is referred to as the set of \textit{active variables}. Computational effort associated with UQ
 is hence reduced by means of dimension reduction. However, to further decrease computational effort,
-we approximate $\mathcal{Y}$ using a surrogate, $\tilde{\mathcal{Y}}$ using the sequence of steps
+we approximate $\mathcal{Y}$ using a surrogate, $\tilde{\mathcal{Y}}$, constructed using the sequence of steps
 provided in~\cite{Constantine:2015} (chapter 4), and outlined below in Algorithm~\ref{alg:surr}.
 \bigskip
 \begin{breakablealgorithm}
@@ -148,7 +147,7 @@ provided in~\cite{Constantine:2015} (chapter 4), and outlined below in Algorithm
 	  \State For each $\vec\xi_i$, compute $\vec\eta_i$ = $\mat{W}_1^\top\vec\xi_i$ 
           (Note: $\mathcal{Y}(\vec{\eta}_i)$ $\approx$ $G(\vec{\xi}_i)$)
 	  \State Fit a regression surface, $\tilde{\mathcal{Y}}$ to approximate $\mathcal{Y}$ using the data
-                 points, $(\vec\xi_i,Y(\vec\eta_i))$
+                 points, $(\vec\xi_i,\mathcal{Y}(\vec\eta_i))$
 	  \State Note that the overall approximation is: $G(\vec{\xi})$ $\approx$
                  $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec{\xi})$ 
 	\EndProcedure

@@ -5,9 +5,9 @@ As mentioned earlier in section~\ref{sec:intro}, the gradient-free approach is u
 to compute the active subspace for enabling efficient propagation of the uncertainty from SW
 parameters to thermal conductivity estimates based on NEMD simulations. The gradient-free
 approach yields a computational advantage by not relying on model evaluations for estimating
-the gradients required for estimating $\hat{\mat{C}}$ in~\eqref{eq:chat}. 
+the gradients required for evaluating $\hat{\mat{C}}$ in~\eqref{eq:chat}. 
 Instead, it involves a regression-based local linear approximation of the model output as
-discussed in~\cite{Constantine:2015} (Algorithm 1.2). In this work, however, we implement the
+discussed in~\cite{Constantine:2015}. In this work, however, we implement the
 gradient-free approach in an iterative manner to avoid extraneous model evaluations once
 convergence of $\hat{\mat{C}}$ has been established as discussed further below. 
 
@@ -55,7 +55,7 @@ are outlined in the following algorithm.
   \label{alg:lla}
 \end{breakablealgorithm}
 \bigskip
-
+%
 An initial estimate of the symmetric positive semidefinite matrix, $\hat{\mat{C}}$ 
 and the corresponding eigenspace is hence computed as follows:
 %
@@ -104,7 +104,7 @@ that its value remains between 0 and 1:
 \ee
 %
 
-The sequence of steps for computing the active subspace using the gradient-free approach are outlined
+The sequence of steps for computing the active subspace using the gradient-free approach is outlined
 below in Algorithm~\ref{alg:free}.
 \bigskip
 \begin{breakablealgorithm}
@@ -122,7 +122,7 @@ below in Algorithm~\ref{alg:free}.
 	\State For each $i=1, \ldots, N_\text{total}$, compute
 		\[
 		\begin{aligned}
-	          &{\color{white}=} G(\bm{\xi}_i)~\text{and}~\bm{g}^i = \nabla_{\bm{\xi}}G(\bm{\xi}_i)
+	          &{\color{white}=} G(\bm{\xi}_i)~\text{and}~\bm{g}^i = \nabla_{\bm{\xi}}G(\bm{\xi}_i)~
 		 \text{using~Algorithm~\ref{alg:lla}}
 		\end{aligned}
 		\]
@@ -165,7 +165,7 @@ below in Algorithm~\ref{alg:free}.
 \end{breakablealgorithm}
 \bigskip
 %
-Note the same sequence of steps is followed when using the gradient-based approach for computing the
+Note that the same sequence of steps is followed when using the gradient-based approach for computing the
 active subspace. The distinction between the two approaches essentially lies in the estimation of
 the gradient of the model output. As opposed to local linear approximation, the gradient-based
 approach relies on numerical techniques such as finite differences and hence requires model evaluations

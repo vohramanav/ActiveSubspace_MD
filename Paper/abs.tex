@@ -1,1 +1,30 @@
 \section*{Abstract}
+Bulk phonon transport in silicon (Si) is commonly investigated using the
+Stillinger-Weber (SW) interatomic potential in non-equilibrium molecular
+dynamics (NEMD). Nominal estimates
+of the SW parameters, however, are based on a limited search
+using a sparse set of measurements and constrained by structural stability
+of the considered system in~\cite{Stillinger:1985}. It is therefore
+critical to study the impact of uncertainty associated with nominal
+parameter values on bulk phonon transport using NEMD. 
+However, the analysis typically requires tens of thousands of model evaluations
+and hence, relying purely on atomistic simulations would be impractical.
+In this work, we focus on propagating the uncertainty from SW parameters
+to bulk thermal conductivity estimates using NEMD simulations of a Si bar.
+Computational effort is minimized by reducing the
+dimensionality of the input space by computing the so-called active subspace.
+ Active subspace computation requires gradient information of
+the model output with respect to the uncertain inputs which imposes a 
+computational burden. To overcome this, we employ an iterative strategy
+that estimates the model gradient using a regression-based local linear
+approximation and hence, does not require model evaluations. 
+The active subspace thus computed in an efficient manner is found to be
+1-dimensional, indicating enormous scope for dimension as well as
+associated computational effort reduction. A surrogate model is used to
+represent the variability of the bulk thermal conductivity in the subspace.
+A probability density function (PDF) based on surrogate predictions at 10$^5$
+random samples in the
+7-dimensional input space is shown to capture the mean, mode, and the
+uncertainty in predictions with reasonable accuracy. Finally, the
+active subspace is used to perform a global sensitivity analysis (GSA)
+of the SW parameters.  

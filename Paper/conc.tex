@@ -1,2 +1,50 @@
 \section{Conclusion}
 \label{sec:conc}
+
+Bulk thermal conductivity predictions (QoI) for Si using NEMD are strongly dependent upon the
+choice of nominal values of the SW parameters. However, the calibration process for the
+parameters as discussed by Stillinger and Weber in~\cite{Stillinger:1985} was not
+necessarily robust as it was based on a limited search focused on agreement with the 
+available set of measured data and structural stability of the considered system. 
+It did not account for the presence of measurement error, noise inherent in MD simulations,
+and prior uncertainty associated with the parameters. It is therefore critical to
+investigate the impact of uncertainty in the calibrated SW parameters on model predictions.
+However, as highlighted in this work, it would be impractical to completely rely on
+atomistic simulations for this purpose. Hence, in this study, we focused our efforts on
+discovering the so-called active subspace that predominantly captures the variability
+in bulk thermal conductivity predictions as a function of fewer independent variables
+compared to the original input space. Efficient computation of the active subspace
+was accomplished using an iterative gradient-free approach presented in 
+Section~\ref{sec:method}. Based on the implementation of this approach and the results
+presented in this work, the following conclusions can be drawn:
+%
+\begin{enumerate}
+\item The active subspace computation using the iterative gradient-free approach
+required only 25 NEMD simulations in the 7-dimensional input space using a tolerance, 
+$\tau$~=~0.1.
+
+\item A 1-dimensional active subspace was obtained indicating enormous scope for
+computational gains using the framework presented in this work.
+
+\item The L-2 norm of the error introduced by using a linear regression-fit as a surrogate to the
+QoI variability in the active subspace was found to be approximately 0.1.
+
+\item The PDF based on the 1-dimensional surrogate was observed to capture the mean, mode, and
+the uncertainty in the QoI with reasonable accuracy. Hence, the local linear approximation
+of the model output (see Algorithm~\ref{alg:lla}) seems like a promising technique for
+such compute-intensive applications.
+
+\item Global sensitivity analysis based on Sobol indices using the surrogate, and the
+normalized activity scores yielded consistent results. Specifically, the SW parameters:
+$\gamma$, $\alpha$, and $\lambda$ were found to be major contributors to the
+uncertainty in the QoI.   
+
+\end{enumerate}
+%
+The large uncertainty in the bulk thermal conductivity based on NEMD predictions due to
+a 10$\%$ perturbation in the nominal SW parameter values in Figure~\ref{fig:level2} underscores
+the importance of UQ in atomistic simulation predictions. Successful implementation of the
+computational framework aimed at dimension reduction presented in this work is remarkably
+encouraging. Extension of this work would involve development of novel, more efficient and
+robust computational strategies facilitated by implementation to complex, higher dimensional
+applications.
