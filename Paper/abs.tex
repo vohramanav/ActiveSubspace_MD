@@ -9,22 +9,25 @@ critical to study the impact of uncertainty associated with nominal
 parameter values on bulk phonon transport using NEMD. 
 However, the analysis typically requires tens of thousands of model evaluations
 and hence, relying purely on atomistic simulations would be impractical.
-In this work, we focus on propagating the uncertainty from SW parameters
+In this work, we focus on an efficient approach for propagating the 
+uncertainty from SW parameters
 to bulk thermal conductivity estimates using NEMD simulations of a Si bar.
 Computational effort is minimized by reducing the
 dimensionality of the input space by computing the so-called active subspace.
- Active subspace computation requires gradient information of
-the model output with respect to the uncertain inputs which imposes a 
-computational burden. To overcome this, we employ an iterative strategy
-that estimates the model gradient using a regression-based local linear
-approximation and hence, does not require model evaluations. 
+Active subspace computation, however, requires gradient information of
+the model output with respect to the uncertain inputs which can be
+computationally challenging. To overcome this challenge, we estimate the
+gradient using a linear regression fit to the available set of
+model evaluations as opposed to a perturbation-based gradient estimation
+(e.g. finite difference, adjoint-based methods etc.) 
+that would require additional model runs. Moreover, 
+we employ an iterative strategy to avoid unnecessary computations once
+a converged active subspace is obtained.
 The active subspace thus computed in an efficient manner is found to be
 1-dimensional, indicating enormous scope for dimension as well as
-associated computational effort reduction. A surrogate model is used to
-represent the variability of the bulk thermal conductivity in the subspace.
-A probability density function (PDF) based on surrogate predictions at 10$^5$
-random samples in the
-7-dimensional input space is shown to capture the mean, mode, and the
-uncertainty in predictions with reasonable accuracy. Finally, the
-active subspace is used to perform a global sensitivity analysis (GSA)
+associated computational effort reduction. A surrogate model is 
+then built in the 1-dimensional subspace to help quantify
+the variability of the bulk thermal conductivity, and is shown to have
+reasonable accuracy. Finally, the
+active subspace is used to perform efficient global sensitivity analysis (GSA)
 of the SW parameters.  
