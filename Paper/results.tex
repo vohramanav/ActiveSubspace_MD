@@ -1,16 +1,21 @@
 \section{Results}
 \label{sec:results}
 
-In this section, we present our findings based on implementing the gradient-free approach presented
-earlier in Section~\ref{sec:method} for computing the active subspace, in~\ref{sub:cas}. 
-The model output in the original space~($G$)
-was approximated as $\mathcal{Y}$ in terms of active variables, $\vec\eta$ in the active subspace. A regression-fit
-to $\mathcal{Y}$, $\tilde{\mathcal{Y}}$ was used as a surrogate for performing UQ. 
-The accuracy of the surrogate was assessed by 
-estimating the relative L-2 norm of the discrepancy between NEMD-based estimates and surrogate predictions,
-and performing a comparative assessment in a probabilistic sense in~\ref{sub:ver}. The surrogate is further
-used for estimating the total Sobol' indices which are shown to be consistent with the normalized activity scores,
-evaluated using~\eqref{eq:ac} and~\eqref{eq:nac}, in~\ref{sub:gsa}.
+In this section, we present our findings based on the implementation of the efficient computational framework 
+presented earlier in Section~\ref{sec:method}, for identifying an active subspace that captures the variability
+in bulk thermal conductivity of Si due to uncertainty in the SW potential parameters. As discussed earlier, the
+active subspace helps transform the dependence of the model output, $G$ on a large set of uncertain physical
+inputs into an equivalent function, $\mathcal{Y}$ in the active subspace. Note that dimension reduction is
+accomplished since $\mathcal{Y}$ depends on a much smaller set of independent variables, $\vec\eta$,
+referred to as active variables. While dimension reduction increases computational efficiency, it could be enhanced
+by means of a regression fit to the trend exhibited by $\mathcal{Y}(\vec{\eta})$. Since the active subspace is
+observed to be 1-dimensional in the present case, we used a linear regression fit to $\mathcal{Y}(\vec{\eta})$
+to construct a surrogate, $\tilde{\mathcal{Y}}(\vec{\eta})$.
+The accuracy of the surrogate was assessed by first evaluating the 
+relative L-2 norm of the discrepancy between NEMD-based estimates and surrogate predictions,
+and second, by comparing probability distributions of the bulk thermal conductivity as obtained using
+model evaluations, and the surrogate. The surrogate was exploited to perform a GSA of the SW
+potential parameters using the two approaches discussed in~\ref{sub:scores}.
 
 \subsection{Computing the active subspace}
 \label{sub:cas}
@@ -34,12 +39,12 @@ $A$ & $B$ & $p$ & $q$ & $\alpha$ & $\lambda$ & $\gamma$ \\
 \label{tab:sw}
 \end{table}
 %
-Initial set of model evaluations were used to estimate the gradient vector of thermal conductivity with
+An initial set of model evaluations was used to estimate the gradient vector of thermal conductivity with
 individual components representing the derivative with respect to $\xi_i$ corresponding to $\theta_i$ in
 the physical space. At each iteration, $i$, model evaluations at 5 new samples in the full space were 
-obtained and the quantity, $\vec{\varepsilon}^{(i)}$ was computed using~\eqref{eq:conv}.The iterative
+obtained and the quantity, $\vec{\varepsilon}^{(i)}$ was computed using~\eqref{eq:conv}. The iterative
 procedure was terminated once the highest component of $\vec{\varepsilon}^{(i)}$ was found to be smaller than
-the set tolerance, $\tau$ = 0.1. In this case, the process was observed to converge after 4 iterations
+the set tolerance, $\tau$ = 0.1. In this case, the process was observed to converge after 4 iterations,
 and required model evaluations at 25 samples, yielding $\max(\vec{\varepsilon}^{(i)})$~=~0.085.
  The resulting active subspace was found to be
 1-dimensional. In Figure~\ref{fig:casfig1}, we plot the components of the dominant eigenvector (left),
@@ -59,7 +64,8 @@ using components of the dominant eigenvector between successive iterations.}
 
 The normalized eigenvalue spectrum is illustrated
 in Figure~\ref{fig:casfig2}~(left), and the plot of $\mathcal{Y}$ vs. $\vec\eta$, regarded as the \textit{sufficient
-summary plot} (SSP) is provided in Figure~\ref{fig:casfig2}~(right). 
+summary plot} (SSP) is provided in Figure~\ref{fig:casfig2}~(right). Note that the surrogate $\tilde{\mathcal{Y}}$
+represented by the straight-line is also illustrated.
 %
 \begin{figure}[htbp]
 \begin{center}
@@ -76,14 +82,13 @@ active subspace.}
 \end{center}
 \end{figure}
 %
-Both plots confirm the existence of a 1-dimensional active subspace. The normalized eigenvalue spectrum
+The normalized eigenvalue spectrum
 shows that the ratio of the first two eigenvalues, $\left(\frac{\lambda_1}{\lambda_2}\right)\sim\mathcal{O}(10^2)$.
-Hence, the second largest eigenvalue is roughly two orders of magnitude smaller than the largest eigenvalue,
-indicating a 1-dimensional subspace. Furthermore, the trends in the SSP seem to have been captured
-reasonably well using a linear regression-fit which is also indicative of a 1-dimensional subspace. The linear 
-fit is considered as a surrogate for $\mathcal{Y}$ i.e. $\tilde{\mathcal{Y}}$. In the following section, 
-we verify the accuracy of the
-surrogate. 
+Thus, the second largest eigenvalue is roughly two orders of magnitude smaller than the largest eigenvalue,
+indicating a 1-dimensional active subspace. Furthermore, the trends in the SSP seem to have been captured
+reasonably well using a linear regression fit which further confirms the existence of a 1-dimensional active
+subspace in this case. In the following section, we verify the accuracy of the
+surrogate, $\tilde{\mathcal{Y}}$. 
 
 
 \subsection{Surrogate assessment}
@@ -92,11 +97,11 @@ surrogate.
 The surrogate, $\tilde{\mathcal{Y}}$, illustrated in Figure~\ref{fig:casfig2}~(right) 
 is assessed for accuracy at two levels: First, we perform a low-level assessment by estimating
  the relative L-2 norm of the difference
-($\varepsilon_d$) between surrogate predictions and NEMD-based estimates of thermal conductivity 
-of the Si bar in the active subspace ($\mathcal{Y}$) as follows:
+($\varepsilon_d$) between surrogate predictions and NEMD-based estimates of bulk thermal conductivity 
+of the Si bar ($\mathcal{Y}$) as follows:
 %
 \be
-\varepsilon_d = \frac{\|\mathcal{Y}(\bm{\xi}) - \tilde{\mathcal{Y}}(\bm{\xi})\|_2}{\|\mathcal{Y}(\bm{\xi})\|_2}
+\varepsilon_d = \frac{\|\mathcal{Y}(\bm{\eta}) - \tilde{\mathcal{Y}}(\bm{\eta})\|_2}{\|\mathcal{Y}(\bm{\eta})\|_2}
 \ee
 %
 The quantity, $\varepsilon_d$, was estimated to be roughly 0.1. In other words, the error introduced
@@ -105,26 +110,19 @@ For many applications, this error might be too large, however, it is reasonable 
 potentially acceptable for this problem considering that we are interested in approximating
 the variability in thermal conductivity due to uncertainty in the SW
 parameters. An exact UQ analysis in a 7-dimensional input space for an application involving
-atomistic simulations would anyways be computationally impractical as discussed earlier in
+atomistic simulations would be computationally impractical as discussed earlier in
 Section~\ref{sec:intro}, and highlighted specifically in Table~\ref{tab:effort}.
 
 Second, a higher level assessment of $\tilde{\mathcal{Y}}$ is performed wherein
 the first-order and second-order 
 statistics as well as probability distributions, obtained using the
 surrogate and the set of available model evaluations at 35 samples in the 7-dimensional
-input space are compared. Note that the surrogate predictions were obtained at the
-same set of 35 samples for this purpose. Below, we provide a table consisting of the
-mean and standard deviation of bulk thermal conductivity based on model and the
-surrogate. Additionally, we plot a histogram based on model evaluations and compare
-it with a probability density function (PDF), generated using kernel density estimation (KDE)
-of surrogate predictions at 10$^5$ Monte Carlo samples in the 7-dimensional input domain. 
+input space are compared. Table~\ref{tab:verify} provides estimates of the
+mean and the standard deviation of bulk thermal conductivity based on the model and the
+surrogate. 
 %
-\begin{figure}[htbp]
+\begin{table}[htbp]
 \begin{center}
-\begin{minipage}[htbp]{.25\linewidth}
-\vspace{0pt}
-%\centering
-\hspace{-25mm}
 \begin{tabular}{ccc}
 \toprule
 $\textbf{Distribution}$ & $\mu$ & $\sigma$ \\ 
@@ -133,64 +131,47 @@ $G$~(Model) & 13.764 & 3.573 \\
 $\tilde{\mathcal{Y}}$ (1D Surrogate) & 13.757 & 3.441 \\
 \bottomrule
 \end{tabular}
-\end{minipage}
-\hspace{5mm}
-\begin{minipage}[htbp]{.25\linewidth}
-\vspace{0pt}
-%\centering
-\includegraphics[width=3.0in]{./Figures/free_pdf_comp_SSP1D}
-\end{minipage}%
-\end{center} 
-\caption{Left: Table providing the mean ($\mu$) and the standard deviation ($\sigma$) corresponding to
+\end{center}
+\caption{Mean ($\mu$) and standard deviation ($\sigma$) corresponding to
 the model evaluations ($G$) and surrogate predictions ($\tilde{\mathcal{Y}}$)
-at 35 samples in the cross-validation set. Right: A comparison of the histogram plot based on the
+at 35 samples in the cross-validation set.}
+\label{tab:verify}
+\end{table}
+%
+Figure~\ref{fig:level2} illustrates a comparison of a histogram based on the 35 model evaluations
+and a probability density function (PDF), generated using kernel density estimation (KDE)
+of surrogate predictions at 10$^5$ Monte Carlo samples in the 7-dimensional input domain. 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=3.0in]{./Figures/free_pdf_comp_SSP1D}
+\end{center} 
+\caption{A illustrative comparison of the histogram plot based on the
 available set of 35 model evaluations and a PDF generated using surrogate predictions at 10$^5$
 random samples in the 7-dimensional input domain.}  
 \label{fig:level2}
 \end{figure}
 %
-Both, first-order ($\mu$) and second-order ($\sigma$) statistics of the bulk thermal conductivity ($\kappa$),
-obtained using the model and the surrogate are found to be in close agreement. Additionally, the
-comparison of distributions in Figure~\ref{fig:level2} (right) confirms that the PDF captures the modal
+From the values reported in Table~\ref{tab:verify}, it can be said that the
+ first-order ($\mu$) and second-order ($\sigma$) statistics of the bulk thermal conductivity ($\kappa$),
+obtained using the model and the surrogate  are found to be in close agreement. Additionally, the
+comparison of distributions in Figure~\ref{fig:level2} confirms that the PDF captures the modal
 estimate as well as the spread in $\kappa$ with reasonable accuracy. Hence, the surrogate based on
 the 1-dimensional active subspace, evaluated earlier in~\ref{sub:cas} can be used to quantify and
 characterize the uncertainty in bulk thermal conductivity of the Si bar due to the uncertainty in the
 SW potential parameters. In the following section, we use the surrogate to estimate the total Sobol'
-sensitivity indices of the SW parameters.  
-
+sensitivity indices of the SW parameters. Additionally, we perform a consistency check by comparing
+these estimates with the normalized activity scores, computed using the converged 1-dimensional
+active subspace. 
 
 \subsection{Global Sensitivity Analysis}
 \label{sub:gsa}
 
-Sobol total effect index, $\mathcal{T}(\theta_i)$, is one of the most commonly used variance-based 
-measures for global
-parametric sensitivity~\cite{Sobol:2001}. For a given input, $\theta_i$ and the corresponding output, 
-$G(\theta_i)$, it accounts for the individual as well as coupled contributions of $\theta_i$ (due to
-interaction with other inputs)
-to the variability in the QoI. Mathematically, this is expressed as follows:
-%
-\be
-\mathcal{T}(\theta_i) = 1 - 
-\frac{\V[\mathbb{E}(G|\vec{\theta}_{\sim i})]}{\V(G)},
-\label{eq:total}
-\ee
-%
-where $\vec{\theta}_{\sim i}$ is a vector of all but the $i^{th}$ input. Note that the framework for 
-estimating $\mathcal{T}(\theta_i)$ assumes that the individual inputs are statistically independent.
-Several extensions have been proposed for GSA in situations involving a correlated set of
-inputs~\cite{Borgonovo:2007,Li:2010,Jacques:2006,Xu:2007,Hart:2017}. However, in the present work,
-the SW parameters are considered to be independent. 
-
-A pertinent challenge associated with  the computation of $\mathcal{T}(\theta_i)$ is the associated
-computational effort considering tens of thousands of model evaluations are typically needed to obtained
-converged estimates. Hence, for the present application, GSA would be intractable. However, we mitigate
-this challenge by estimating $\mathcal{T}(\theta_i)$ using predictions of the surrogate model, 
-$\tilde{\mathcal{Y}}$ at a large set of pseudorandom samples in the 7-dimensional physical domain.  
-Moreover, as discussed earlier in Section~\ref{sec:method}, components of the eigenvectors in the
-active subspace could be used for estimating the activity scores (see~\eqref{eq:ac}) for the purpose of GSA.
-A bar-graph illustrating the normalized activity scores of the SW potential parameters is illustrated in
-Figure~\ref{fig:gsa}. Additionally, we have included estimates of $\mathcal{T}(\theta_i)$, computed using
-the 1-dimensional surrogate. 
+The surrogate $\tilde{\mathcal{Y}}(\vec{\eta})$ was used to estimate the total Sobol index, $T_i(G)$ for each
+uncertain parameter by mapping 10$^5$ independent Monte Carlo samples in the physical domain
+to the bulk thermal conductivity of the Si bar as discussed earlier in~\ref{subsub:gsa_surr}. 
+Additionally, normalized activity scores ($\nu_{i,p}$) were computed using~\eqref{eq:ac} and~\eqref{eq:nac}.
+A bar-graph comparing estimates of $T_i(G)$ and $\nu_{i,p}$ is provided in
+Figure~\ref{fig:gsa}. 
 %
 \begin{figure}[htbp]
 \begin{center}

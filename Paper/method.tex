@@ -1,38 +1,51 @@
 \section{Methodology}
 \label{sec:method}
 
-As mentioned earlier in section~\ref{sec:intro}, the gradient-free approach is used in this work
-to compute the active subspace for enabling efficient propagation of the uncertainty from SW
-parameters to thermal conductivity estimates based on NEMD simulations. The gradient-free
-approach yields a computational advantage by not relying on model evaluations for estimating
-the gradients required for evaluating $\hat{\mat{C}}$ in~\eqref{eq:chat}. 
-Instead, it involves a regression-based local linear approximation of the model output as
-discussed in~\cite{Constantine:2015}. In this work, however, we implement the
-gradient-free approach in an iterative manner to avoid extraneous model evaluations once
-convergence of $\hat{\mat{C}}$ has been established as discussed further below. 
+In this section, we provide details pertaining to the computational framework used to identify
+the active subspace for the present application involving NEMD simulations of bulk transport
+in Si. As discussed earlier, it requires repeated evaluations of the gradient of the model output
+i.e. the bulk thermal conductivity with respect to the uncertain SW parameters at random samples
+in the input domain. If a perturbation method such as finite difference is used, then gradient
+estimation at $N$ samples would require $N(d+1)$ model evaluations, where $d$ is the number
+of uncertain inputs. Clearly, for a large $N$, this approach would quickly become prohibitive
+considering that NEMD simulations are computationally intensive. Therefore, to overcome the
+computational hurdle, we rely on estimating the gradient using a regression-based approach,
+whereby, a linear regression fit is performed to the available set of model evaluations. Additionally, in order
+to further avoid unnecessary model evaluations, the active subspace computations are performed
+in an iterative manner. Specific details pertaining to gradient estimation as well as active
+subspace computation are discussed further below in~\ref{sub:gradient} and~\ref{sub:subspace}. The
+active subspace is exploited to perform a GSA of the uncertain SW potential parameters as discussed
+later in~\ref{sub:scores}.
 
-We begin by generating an initial set ($n_0$) of random samples in the full space input domain
-and evaluating the model output at these samples. Note that the samples are generated
+\subsection{Gradient estimation}
+\label{sub:gradient} 
+
+For a given set of model evaluations at $N$ random samples in the full space input domain,
+we outline the procedure for estimating the matrix, $\hat{\mat{C}}$ in~\eqref{eq:chat}.
+Note that the samples are generated
 according to the joint probability distribution of the canonical random variables
 ($\vec\xi$), $\pi_\vec\xi$. An independent set of $M$ samples is also generated from $\pi_\vec\xi$
-using Monte Carlo sampling. For each samples in $M$, a least-squares fit to $s$ nearest neighbors in
-$n_0$ is performed. The slope vector ($\vec{d}_i$) of the linear regression-fit is estimated and recorded.
-The procedure for estimating $\vec{d}_i$ is referred to as local linear approximation and the underlying steps
-are outlined in the following algorithm. 
+using Monte Carlo sampling. However, model evaluations are not required at these $M$ samples.
+For each sample in $M$, a least-squares fit to $s$ nearest neighbors in
+$n_0$ is performed. The value of $s$ ranges from 2 to $N-1$; $s$ = $N$ is regarded as the global approximation.
+In this work, we specify $s$ as $N-1$ to capture the gradients in a leave-one-out fashion.
+The slope vector ($\vec{d}_i$) of the linear regression-fit is estimated and recorded.
+The collection of $\vec{d}_i$'s thus obtained are used to estimate the matrix, $\hat{\mat{C}}$. The specific 
+sequence of steps is outlined in Algorithm~\ref{alg:lla}.
 %
 \bigskip
 \begin{breakablealgorithm}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
-  \caption{For constructing the matrix, $\hat{\mat{C}}$ in~\eqref{eq:chat}}
+  \caption{Constructing the matrix, $\hat{\mat{C}}$ in~\eqref{eq:chat} for a given set of $N$ model evaluations}
   \begin{algorithmic}[1]
-	\Procedure{Local Linear Approximation}{} 
+	\Procedure{Regression-based Approach}{} 
 	\State Draw $N$ random samples, $\{\bm{\xi}_j\}_{j=1}^{N}$ 
 	according to $\pi_{\bm{\xi}}$.
 	\State Compute $G(\bm\xi_j)$, $j=1, \ldots, N$.
 	\State Draw $M$ random samples, $\{\bm{\zeta}_i\}_{i=1}^{M}$
 	according to $\pi_{\bm{\xi}}$.
-	\State Choose an integer $s \leq N$ 
+	\State Choose an integer $s \in [2,N-1]$ 
 	\State For each $i=1, \ldots, M$, compute 
 	\[
 	\begin{aligned}
@@ -48,7 +61,7 @@ are outlined in the following algorithm.
 	\]
 	\State Compute the matrix, $\hat{\mat{C}}$:
 	\[
-	\hat{\mat{C}} \approx \frac{1}{M} \sum_{i=1}^{M} \vec{d}_i\vec{d}_i^T = \hat{\mat{W}}\hat{\mat{\Lambda}}\hat{\mat{W}}^\top
+	\hat{\mat{C}} \approx \frac{1}{M} \sum_{i=1}^{M} \vec{d}_i\vec{d}_i^T 
 	\]
 	\EndProcedure
   \end{algorithmic}
@@ -56,16 +69,28 @@ are outlined in the following algorithm.
 \end{breakablealgorithm}
 \bigskip
 %
+
+\subsection{Subspace computation}
+\label{sub:subspace} 
+
+An initial set of $n_0$ samples is drawn according to the joint probability distribution
+$\pi_{\vec{\xi}}$ of the inputs, $\vec{\xi}$. Model evaluations are performed at these
+$n_0$ samples. 
 An initial estimate of the symmetric positive semidefinite matrix, $\hat{\mat{C}}$ 
-and the corresponding eigenspace is hence computed as follows:
+is then obtained using Algorithm~\ref{alg:lla}. The eigenvalue decomposition of 
+$\hat{\mat{C}}$ is performed to obtain initial estimates of the eigenvectors and
+corresponding eigenvalues:
 %
 \be
 \hat{\mat{C}} = \frac{1}{M}\sum\limits_{i=1}^{M}\bm{d}_i\bm{d}_i^\top = \hat{\bm{W}}\hat{\bm{\Lambda}}\hat{\bm{W}}^\top.
 \ee
 %
-At each subsequent iteration, a new set of Monte Carlo samples is generated followed by implementation of the
- local linear approximation procedure on the enriched set of model evaluations to obtain an improved estimate of
- $\hat{\mat{C}}$ and its eigenspace. The improved eigenspace is partitioned as discussed earlier in~\ref{sub:as}
+At each subsequent iteration, a new set of Monte Carlo samples is generated using the joint 
+probability law, $\pi_{\vec{\xi}}$. Since model evaluations are expensive, the number of new samples
+is a factor of the initial number, $n_0$. The augmented set of available and newly generated model
+evaluations are used to obtain improved estimates of $\hat{\mat{C}}$ using Algorithm~\ref{alg:lla}.
+The eigenvalue decomposition of $\hat{\mat{C}}$ yields refined estimates of the eigenspace.
+The improved eigenspace is partitioned as discussed earlier in~\ref{sub:as}
  to obtain the active subspace. For a given eigenvector ($j^{th}$) in the active subspace, 
  we compute the relative L-2 
  norm of the difference in squared values of corresponding components ($\varepsilon_j^k$) of the same eigenvector,
@@ -81,31 +106,12 @@ At each subsequent iteration, a new set of Monte Carlo samples is generated foll
 where $p$ denotes the dimension of the column space of $\mat{W}_1$ or the number of eigenvectors in
 the active subspace.
 The quantity, $\varepsilon_j^k$ is recorded as the $j^{th}$ component of $\vec\varepsilon^k$. Convergence is
-established once the component with the highest magnitude is below a given tolerance, $\tau$.
-
-It has been shown that the components of the eigenvectors in the active subspace can be used for global
-sensitivity analysis (GSA) by estimating the so-called 
-\textit{activity scores}~\cite{Diaz:2016,Constantine:2017,Vohra:2018c}. Specifically, in~\cite{Vohra:2018c},
-it was shown that the activity scores provide a means for approximating the DGSMs and hence the upper bound
-on the total Sobol' sensitivity index. The activity score, $\nu_i$ for the $i^{th}$ uncertain
-input can be computed using the following expression:
+established once the component with the highest magnitude is below a given tolerance, $\tau$. 
+As discussed earlier in~\ref{sub:scores}, the converged active subspace can be used to perform
+a global sensitivity analysis of the uncertain SW parameters by evaluating the activity scores. 
+The sequence of steps for computing the active subspace is outlined
+in Algorithm~\ref{alg:free}.
 %
-\be
-\nu_{i,p}(G) = \sum\limits_{j=1}^{p} \Lambda_j w_{i,j}^2, i=1,\ldots,\Nt.
-\label{eq:ac}
-\ee
-%
-A more robust measure is the normalized activity score to ensure
-that its value remains between 0 and 1:
-%
-\be
-\tilde{\nu}_{i,p}(G) = \scalebox{1.25}{$\frac{\nu_{i,p}(G)}{\sum_i\nu_{i,p}(G)}$}.
-\label{eq:nac}
-\ee
-%
-
-The sequence of steps for computing the active subspace using the gradient-free approach is outlined
-below in Algorithm~\ref{alg:free}.
 \bigskip
 \begin{breakablealgorithm}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -158,18 +164,78 @@ below in Algorithm~\ref{alg:free}.
 			\State break
 		\EndIf
        \EndLoop
-	\State Compute the normalized activity scores, $\tilde{\nu}_{i,p}(G)$ using~\eqref{eq:ac} and~\eqref{eq:nac}
+%	\State Compute the normalized activity scores, $\tilde{\nu}_{i,p}(G)$ using~\eqref{eq:ac} and~\eqref{eq:nac}
     \EndProcedure
   \end{algorithmic}
   \label{alg:free}
 \end{breakablealgorithm}
 \bigskip
 %
-Note that the same sequence of steps is followed when using the gradient-based approach for computing the
-active subspace. The distinction between the two approaches essentially lies in the estimation of
-the gradient of the model output. As opposed to local linear approximation, the gradient-based
-approach relies on numerical techniques such as finite differences and hence requires model evaluations
-for computing the gradient. While additional model runs increase the computational effort in this case,
-the gradient-based approach is expected to be more robust depending upon the application. For the present
-application, model runs are expensive and therefore the gradient-based approach quickly becomes prohibitive.
+
+\subsection{GSA using the Active Subspace}
+\label{sub:scores} 
+
+The resulting active subspace could be used to perform a GSA of the uncertain inputs i.e. the SW potential
+parameters in two ways: (1) By estimating the total Sobol index for each SW parameter, and (2) By computing
+the so-called activity scores. Both approaches are expected to yield consistent trends for the parametric 
+sensitivities, and discussed as follows. 
+
+\subsubsection{Surrogate-based GSA}
+\label{subsub:gsa_surr}
+
+Consider a model output, $G= G(\xi_1,\xi_2,\ldots,\xi_N)$, where $\xi_i$'s are statistically independent uncertain
+inputs to the model. Total Sobol index, $T_i(G)$, is a commonly used variance-based measure for global sensitivity 
+analysis (GSA). For a given uncertain input, it accounts for its individual contribution as well as contribution due to
+its interaction with other uncertain inputs, to the variability in $G$. Mathematically, it is expressed as follows:
+%
+\be
+T_i(G) = 1 - 
+\frac{\V[\mathbb{E}(G|\vec{\xi}_{\sim i})]}{\V(G)},
+\label{eq:total}
+\ee
+%
+where $\vec{\xi}_{\sim i}$ is a vector of uncertain inputs with the  $i^\text{th}$ entry removed, and $\V$ denotes the 
+variance. The RHS in~\eqref{eq:total} involves multidimensional integrals and is typically estimated using numerical
+techniques such as Monte Carlo integration. Hence, obtaining converged estimates of $T_i(G)$ might require a large 
+number of model runs depending upon the nature of the dependence of $G$ on $\xi_i$'s. To overcome this challenge,
+we exploit the surrogate, $\tilde{\mathcal{Y}}$ (see Algorithm~\ref{alg:surr} and related discussion in~\ref{sub:as})
+that essentially maps the physical parameters ($\vec{\xi}$) to the QoI i.e the bulk thermal conductivity as 
+$\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec{\xi})$.
+Thus, a large number of
+independent random samples in the physical input domain can be mapped to the QoI to compute $T_i(G)$
+with negligible effort. 
+
+\subsubsection{Activity Scores for GSA}
+\label{subsub:gsa_as}
+Several recent efforts have
+focused on an efficient computation of the first and total order Sobol indices
+~\cite{Sudret:2008,Plischke:2013,Tissot:2015,Li:2016} using
+Polynomial chaos surrogates~\cite{Sudret:2008}, density-based sensitivity measures~\cite{Plischke:2013},
+ randomized orthogonal arrays~\cite{Tissot:2015}, and direct computation from the input-output 
+ samples~\cite{Li:2016}. Additionally,
+the derivative-based global sensitivity measures (DGSMs)~\cite{Sobol:2009, Lamboni:2013}
+have been developed to estimate upper bounds on the total Sobol indices using a fraction of computational effort
+otherwise required to estimate the indices themselves~\cite{Vohra:2018b}. It was shown 
+in~\cite{Diaz:2016,Constantine:2017} (and later generalized for a broad range of input probability distributions 
+in~\cite{Vohra:2018c}) that the eigenspace that constitutes the active subspace can be used to
+approximate the DGSMs by evaluating the so-called activity scores. The activity score, $\nu_i$ for the 
+$i^{th}$ uncertain input can be computed using the following expression:
+%
+\be
+\nu_{i,p}(G) = \sum\limits_{j=1}^{p} \lambda_j w_{i,j}^2, i=1,\ldots,\Nt,
+\label{eq:ac}
+\ee
+%
+where $p$ denotes the dimensionality of the eigenspace. 
+A more robust measure is the normalized activity score ($\tilde{\nu}_{i,p}(G)$) that ranges from 0 to 1:
+%
+\be
+\tilde{\nu}_{i,p}(G) = \scalebox{1.25}{$\frac{\nu_{i,p}(G)}{\sum_i\nu_{i,p}(G)}$}.
+\label{eq:nac}
+\ee
+%
+The normalized activity scores are computed for the SW parameters to determine their relative contributions
+to bulk thermal conductivity estimates of Si and compared with corresponding estimates using the surrogate-based
+approach, in section~\ref{sec:results}. 
+
 

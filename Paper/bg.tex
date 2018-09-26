@@ -1,13 +1,16 @@
 \section{Background}
 \label{sec:bg}
 
-In this section, we provide relevant details pertaining to the NEMD simulation in~\ref{sub:nemd}, and
-key theoretical aspects of the active subspace methodology in~\ref{sub:as}.
+In this section, we provide relevant details pertaining to the NEMD simulation in~\ref{sub:nemd}, 
+key theoretical aspects of the active subspace methodology in~\ref{sub:as}, and provide a 
+brief discussion on mathematical linkages between the total Sobol index, DGSMs, and the activity
+scores (obtained from the active subspace) in~\ref{sub:scores}. These linkages could be exploited for the purpose of
+global sensitivity analysis of the uncertain SW potential parameters in an efficient manner. 
 
 \subsection{NEMD simulation}
 \label{sub:nemd}
 
-The NEMD simulations in this work were performed using the LAMMPS software package~\cite{Plimpton:2007}.
+The NEMD simulations in this work were performed using the LAMMPS software~\cite{Plimpton:2007}.
 Specifically, the simulations were performed for a Si bar of length, $L$, subjected to a temperature gradient, 
 $\left(\frac{dT}{dz}\right)$. The temperature gradient was applied by means of Langevin thermostats located
 at $L/4$ and $3L/4$. Schematic illustration of the set-up and the arrangement of atoms is provided below in 
@@ -167,5 +170,43 @@ in the input space as follows:
  \ee
  %
 Hence, the computational effort required for constructing $\hat{\mat{C}}$ scales with the number of samples, $N$.
-To avoid excessive number of model evaluations and hence optimize the computational effort, the gradient-free
-approach for computing the active subspace is employed in an iterative manner as discussed in the following section. 
+To avoid excessive number of model evaluations and hence optimize the computational effort, the regression-based
+approach for gradient estimation is employed to compute the active subspace
+in an iterative manner as discussed in~\ref{sub:gradient} and~\ref{sub:subspace}. Furthermore, the
+active subspace could be exploited to perform a global sensitivity analysis (GSA) of the SW parameters as
+discussed in~\ref{sub:scores}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

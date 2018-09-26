@@ -29,7 +29,7 @@ investigations have revealed the existence of a non-linear trend in the $\kappa^
 relationship especially at large values of $L$~\cite{Sellan:2010} for Si. Additionally, 
 thermal conductivity estimate for a given size depends upon the choice of a potential
 function and associated values of its parameters. Specifically for Si, the Stillinger-Weber (SW)
-inter-atomic potential is commonly used in a large number:
+inter-atomic potential ($\Phi$) is commonly used in a large number of studies, as
 %
 \be
 \Phi = \sum\limits_{i,j(i<j)}\phi_2(A,B,p,q,\alpha)\hspace{1mm}+\sum\limits_{i,j,k(i<j<k)}\phi_3(\lambda,\gamma)
@@ -63,8 +63,7 @@ quantity of interest (QoI) i.e. the bulk thermal conductivity of Si,
 in an efficient manner. For this purpose, we perform NEMD simulations of a Si bar
 as discussed later in~\ref{sub:nemd}. The
 motivation for input-space dimension reduction stems from exponential scaling in
-computational effort with the number of parameters, illustrated using the following
-table. 
+computational effort with the number of parameters, illustrated in Table~\ref{tab:effort}. 
 %
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 \begin{table}[htbp]
@@ -88,15 +87,16 @@ Parameters & Model Runs & Time (1h/run)\\
 %
 Here, we consider that in order to perform uncertainty quantification (UQ),
 an average of 10 runs along each input dimension
-is needed, and each run takes approximately an hour. We can easily compute that the time required to 
-perform the analysis in a 7-dimensional input space is in the $\mathcal{O}(10^3)$ years which makes it
+is needed, and each run takes approximately an hour. Therefore, the time required to 
+perform the analysis in a 7-dimensional input space is $\mathcal{O}(10^3)$ years which makes it
 intractable. Note that the considered compute times do not account for simulation queue times that further 
-increases the time required for a run. 
+increase the time required for a run. 
 Although computational gains can be realized using parallelism and sparse grids
 for efficient surrogate construction~\cite{Ma:2009,Constantine:2012,Petvipusit:2014,Vohra:2014}, 
 the issue of exponential scaling would persist.  
-Hence, we aim to tackle it by focusing our efforts on reducing the dimensionality of the problem.
-In our earlier efforts, we presented a strategy~\cite{Vohra:2018b}
+Hence, we aim to tackle the computational expense by focusing our efforts on reducing the 
+dimensionality of the problem.
+In our earlier effort, we presented a strategy~\cite{Vohra:2018b}
 for constructing a surrogate for thermal conductivity dependence on the SW parameters
 in a reduced space, evaluated using the derivative-based global sensitivity measures
 (DGSMs)~\cite{Vohra:2018a}. The focus there was on determining the relative importance of the
@@ -111,24 +111,30 @@ applicability: (1) The QoI is required to be differentiable in the considered in
 estimating the derivative typically requires additional model evaluations which
 imposes a computational burden. Fortunately, in this case,
 the thermal conductivity is observed to exhibit a smooth dependence on the SW parameters. 
-To mitigate the challenge pertaining to derivative estimation, we exploit our recent experience
-involving the application of a gradient-free approach for evaluating the active subspace in
-chemical kinetics applications~\cite{Vohra:2018c}. In this approach, the gradient is estimated
-using a regression-based \textit{local linear approximation} of the QoI and hence does not require
-model evaluations. It was shown in~\cite{Vohra:2018c} that the gradient-free approach
-led to a reasonably accurate estimation of the mean, mode, and the uncertainty in the QoI.
-However, it did not fully capture the sensitivity associated with all uncertain inputs. Since our focus
-in this study is on uncertainty propagation from inputs to the QoI, the gradient-free approach
-seems like a suitable choice considering the computational effort required for
-evaluating the thermal conductivity of a Si bar. In fact, our findings reveal the existence of a 
-1-dimensional active subspace in this case indicating enormous scope for computational savings.
-Moreover, the global sensitivity measures based
-on the active subspace are found to be consistent with our earlier estimates based on 
-DGSMs~\cite{Vohra:2018b}. 
+To mitigate the challenge pertaining to derivative estimation, we exploit 
+a regression-based approach for evaluating the active subspace~\cite{Vohra:2018c}. 
+In this approach, the gradient is estimated
+using a linear regression fit to the available set of model evaluations and therefore does not 
+require additional evaluations at neighboring points as in the case of perturbation-based
+methods such as finite difference. Hence, the regression-based approach seems like a suitable 
+choice for the present application involving molecular dynamics simulations since the
+perturbation-based approaches although more accurate would be intractable owing to the
+associated computational effort. Moreover, it was shown for a chemical kinetics application
+in~\cite{Vohra:2018c} that the regression-based approach led to reasonable estimates of
+ the statistics of the QoI due to input uncertainties.
+As mentioned earlier, a computationally tractable approach for propagating the uncertainty
+from the potential parameters to the bulk thermal conductivity of Si is the prime focus of this  
+effort. In fact, we have
+shown that using a regression-based approximation to the gradient, a 1-dimensional
+active subspace is obtained which is also verified for accuracy. Additionally, the global 
+sensitivity measures, obtained using the 1-dimensional active subspace, are found to be consistent with 
+our earlier estimates based on DGSMs~\cite{Vohra:2018b}. 
 
 The remainder of this article is organized as follows. In section~\ref{sec:bg}, we provide details
-pertaining to the NEMD simulation in \ref{sub:nemd}, and a brief background on active subspaces
-in~\ref{sub:as}. Details pertaining to the computational framework are
+pertaining to the NEMD simulation in \ref{sub:nemd}, a brief background on active subspaces
+in~\ref{sub:as}, and global sensitivity analysis using the active subspace 
+in~\ref{sub:scores}. 
+Details pertaining to the computational framework are
 provided in section~\ref{sec:method}. Results based on implementing the framework to
 compute the active subspace
 are presented in section~\ref{sec:results}. Finally, useful conclusions are drawn based on this
