@@ -12,10 +12,10 @@ by means of a regression fit to the trend exhibited by $\mathcal{Y}(\vec{\eta})$
 observed to be 1-dimensional in the present case, we used a linear regression fit to $\mathcal{Y}(\vec{\eta})$
 to construct a surrogate, $\tilde{\mathcal{Y}}(\vec{\eta})$.
 The accuracy of the surrogate was assessed by first evaluating the 
-relative L-2 norm of the discrepancy between NEMD-based estimates and surrogate predictions,
+relative L$^2$ norm of the discrepancy between NEMD-based estimates and surrogate predictions,
 and second, by comparing probability distributions of the bulk thermal conductivity as obtained using
 model evaluations, and the surrogate. The surrogate was exploited to perform a GSA of the SW
-potential parameters using the two approaches discussed in~\ref{sub:scores}.
+potential parameters as well as for evaluating a joint likelihood of the important parameters.
 
 \subsection{Computing the Active Subspace}
 \label{sub:cas}
@@ -96,7 +96,7 @@ surrogate, $\tilde{\mathcal{Y}}$.
 
 The surrogate, $\tilde{\mathcal{Y}}$, illustrated in Figure~\ref{fig:casfig2}~(right) 
 is assessed for accuracy at two levels: First, we perform a low-level assessment by estimating
- the relative L-2 norm of the difference
+ the relative L$^2$ norm of the difference
 ($\varepsilon_d$) between surrogate predictions and NEMD-based estimates of bulk thermal conductivity 
 of the Si bar ($\mathcal{Y}$) as follows:
 %
@@ -185,7 +185,7 @@ activity scores, $\tilde{\nu}_{i,p}$, for GSA of the SW potential parameters.}
 The sensitivity trends from the two approaches are found to be consistent. This is expected since
 both, the surrogate and the dominant eigenvectors are associated with the same 1-dimensional active 
 subspace. However, the quantitative agreement in the estimates of $T_i(G)$ and $\tilde{\nu}_{i,p}$
-is coincidental to the present problem. The trends observed in Figure~\ref{fig:gsa} indicate
+is purely coincidental. The trends observed in Figure~\ref{fig:gsa} indicate
  that the variability in bulk thermal conductivity is predominantly
 due to the uncertainty in $\alpha$, $\lambda$, and $\gamma$. This is also consistent with our earlier
 findings involving GSA using DGSMs~\cite{Vohra:2018b}~(see Figure~7 therein). 
@@ -234,7 +234,7 @@ relationship in~\eqref{eq:bayes}~\cite{Haario:2001, Haario:2006,Xu:2014}.
 However, they typically require tens of thousands of model runs which would be
 impractical for the present application. Here, $\alpha$ and $\gamma$ are considered to be independent and
 uniformly distributed in the intervals, [1.62, 1.98] and [1.08, 1.32] respectively. The joint posterior is thus 
-proportional to the joint likelihood, modelled using a Gaussian distribution:
+proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \be
 \mathbb{P}(\bm{D}\vert\bm{\theta}) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(\kappa_{\tiny{\mbox{E}}} - 
@@ -248,7 +248,7 @@ NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and measurements~($\kappa_{\tiny{
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
 $\kappa_{\tiny{\mbox{MD}}}$. To overcome this challenge, we exploit the surrogate, 
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
-$\kappa_{\tiny{\mbox{MD}}}$ in~\eqref{eq:like}.
+$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}.
 
 The joint likelihood was evaluated on a 2D cartesian grid containing 40$\times$40 samples, and is shown
 using a contour plot in Figure~\ref{fig:like}(a). Note that 

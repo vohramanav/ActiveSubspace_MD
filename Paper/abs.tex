@@ -1,15 +1,10 @@
 \section*{Abstract}
-Bulk phonon transport in silicon (Si) is commonly investigated using the
-Stillinger-Weber (SW) interatomic potential in non-equilibrium molecular
-dynamics (NEMD). Nominal estimates
-of the SW parameters, however, are based on a limited search
-using a sparse set of measurements and constrained by structural stability
-of the considered system in~\cite{Stillinger:1985}. It is therefore
-critical to study the impact of uncertainty associated with nominal
-parameter values on bulk phonon transport using NEMD. 
+We are interested in investigating the impact of uncertainty in the
+Stillinger-Weber potential parameters on NEMD-based predictions of bulk
+thermal conductivity of silicon. 
 However, the analysis typically requires tens of thousands of model evaluations
-and hence, relying purely on atomistic simulations would be impractical.
-In this work, we focus on an efficient approach for propagating the 
+and therefore, relying purely on atomistic simulations would be impractical.
+Hence, we focus on an efficient approach for propagating the 
 uncertainty from SW parameters
 to bulk thermal conductivity estimates using NEMD simulations of a Si bar.
 Computational effort is minimized by reducing the
@@ -28,6 +23,7 @@ The active subspace thus computed in an efficient manner is found to be
 associated computational effort reduction. A surrogate model is 
 then built in the 1-dimensional subspace to help quantify
 the variability of the bulk thermal conductivity, and is shown to have
-reasonable accuracy. Finally, the
-active subspace is used to perform efficient global sensitivity analysis (GSA)
-of the SW parameters.  
+reasonable accuracy. The
+active subspace is also used to perform efficient global sensitivity analysis (GSA)
+of the SW parameters. Moreover, we demonstrate its applicability for accelerating
+parameter estimation in a Bayesian setting.  

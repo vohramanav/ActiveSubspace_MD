@@ -1,11 +1,9 @@
 \section{Background}
 \label{sec:bg}
 
-In this section, we provide relevant details pertaining to the NEMD simulation in~\ref{sub:nemd}, 
-key theoretical aspects of the active subspace methodology in~\ref{sub:as}, and provide a 
-brief discussion on mathematical linkages between the total Sobol index, DGSMs, and the activity
-scores (obtained from the active subspace) in~\ref{sub:scores}. These linkages could be exploited for the purpose of
-global sensitivity analysis of the uncertain SW potential parameters in an efficient manner. 
+In this section, we provide relevant details pertaining to the NEMD simulation 
+in~\ref{sub:nemd}, and key theoretical aspects of the active subspace methodology 
+in~\ref{sub:as}.
 
 \subsection{NEMD simulation}
 \label{sub:nemd}
@@ -107,8 +105,8 @@ $\mat{C}$:
 \ee
 %  
 where $dP_\vec\xi$ = $\pi_\vec\xi d\vec\xi$. Note that $G$ is assumed to differentiable in the considered
-input domain. Additionally, $G$ and its partial derivatives in~\eqref{eq:C} are assumed to be L-2 
-integrable. Consider the eigenvalue decomposition of $\mat{C}$:
+input domain. Additionally, $G$ and its partial derivatives in~\eqref{eq:C} are assumed to be 
+L$^2$ integrable. Consider the eigenvalue decomposition of $\mat{C}$:
 %
 \be
 \mat{C} = \mat{W}\mat{\Lambda}\mat{W}^\top.
