@@ -25,7 +25,8 @@ Figure~\ref{fig:setup}.
   \end{tabular}
 \caption{(a) Schematic illustration of the simulation set-up for estimating the thermal conductivity of a Si bar of
 length, $L$, subjected to a temperature gradient, $\left(\frac{4\Delta T}{L}\right)$, (b) 
-Initial configuration of Si atoms in the bar.}
+Initial configuration of Si atoms in the bar. Figure reproduced with permission 
+from~\cite{Vohra:2018a}.}
 \label{fig:setup}
 \end{center}
 \end{figure}
@@ -76,12 +77,8 @@ $\rightarrow$ \hspace{5mm} NVE (II)
 \tiny{N: Number of Atoms~~~P: Pressure~~~V: Volume~~~T: Temperature~~~E: Energy}
 \end{center}
 %
-Initially, our NEMD simulation set-up did not comprise an NPT ensemble. However,
-since computing the active subspace involves pseudorandom sampling of the marginal distributions
-of the SW potential parameters, it was observed that the structural integrity of the Si bar was lost for
-certain set of parameter values. To circumvent this challenge, an NPT ensemble was run
-(for a sufficiently long time), prior to the NVT ensemble to ensure that the system relaxes to a 
-steady value of the bar length as discussed in~\cite{Vohra:2018a}.
+In the first stage, an NPT ensemble was run for a sufficiently long time to to ensure that the 
+system attains a steady value of the bar length, as discussed in~\cite{Vohra:2018a}.
 During the NVT stage, the system is equilibrated to a specific bulk temperature at which the thermal
 conductivity of the bar is to be estimated. The NVE (I) stage involves equilibration of the thermostats
 at specified temperatures. Lastly, during the NVE (II) stage, the trajectory of individual atoms during
@@ -104,7 +101,8 @@ $\mat{C}$:
 \label{eq:C}
 \ee
 %  
-where $dP_\vec\xi$ = $\pi_\vec\xi d\vec\xi$. Note that $G$ is assumed to differentiable in the considered
+where $dP_\vec\xi$ = $\pi_\vec\xi d\vec\xi$. Note that $G$ is assumed to be 
+differentiable in the considered
 input domain. Additionally, $G$ and its partial derivatives in~\eqref{eq:C} are assumed to be 
 L$^2$ integrable. Consider the eigenvalue decomposition of $\mat{C}$:
 %
@@ -134,30 +132,7 @@ $\{\lambda_1,\ldots,\lambda_p\}$ as its entries. Dimension reduction is accompli
 model output, $G(\vec\xi)$ (a function of $\Nt$ independent inputs) into $\mathcal{Y}(\vec\eta)$, a
 function of $p$ independent inputs, where $\vec\eta$ = $\mat{W}_1^\top \vec\xi\in\mathbb{R}^p$, 
 is referred to as the set of \textit{active variables}. Computational effort associated with UQ
-is hence reduced by means of dimension reduction. However, to further decrease computational effort,
-we approximate $\mathcal{Y}$ using a surrogate, $\tilde{\mathcal{Y}}$, constructed using the sequence of steps
-provided in~\cite{Constantine:2015} (chapter 4), and outlined below in Algorithm~\ref{alg:surr}.
-\bigskip
-\begin{breakablealgorithm}
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
-  \caption{For constructing the surrogate model, $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec\xi)$}
-  \begin{algorithmic}[1]
-	\Procedure{Surrogate Model, $\tilde{\mathcal{Y}}$}{} 
-	  \State Consider $N$ available data points in the full space, $(\vec\xi_i,G(\vec\xi_i))$, $i~=~1,\ldots,N$
-	  \State For each $\vec\xi_i$, compute $\vec\eta_i$ = $\mat{W}_1^\top\vec\xi_i$ 
-          (Note: $\mathcal{Y}(\vec{\eta}_i)$ $\approx$ $G(\vec{\xi}_i)$)
-	  \State Fit a regression surface, $\tilde{\mathcal{Y}}$ to approximate $\mathcal{Y}$ using the data
-                 points, $(\vec\xi_i,\mathcal{Y}(\vec\eta_i))$
-	  \State Note that the overall approximation is: $G(\vec{\xi})$ $\approx$
-                 $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec{\xi})$ 
-	\EndProcedure
-  \end{algorithmic}
-  \label{alg:surr}
-\end{breakablealgorithm}
-\bigskip
-
-In practice, the matrix, $\mat{C}$ is numerically approximated using model gradient estimates at random samples
+is hence reduced by means of dimension reduction. In practice, the matrix, $\mat{C}$ is numerically approximated using model gradient estimates at random samples
 in the input space as follows:
  %
  \be
@@ -168,11 +143,11 @@ in the input space as follows:
  \ee
  %
 Hence, the computational effort required for constructing $\hat{\mat{C}}$ scales with the number of samples, $N$.
-To avoid excessive number of model evaluations and hence optimize the computational effort, the regression-based
+To avoid excessive number of model evaluations and hence optimize the computational effort, a regression-based
 approach for gradient estimation is employed to compute the active subspace
-in an iterative manner as discussed in~\ref{sub:gradient} and~\ref{sub:subspace}. Furthermore, the
-active subspace could be exploited to perform a global sensitivity analysis (GSA) of the SW parameters as
-discussed in~\ref{sub:scores}.
+in an iterative manner as discussed in~\ref{sub:gradient} and~\ref{sub:subspace}. The
+active subspace could be exploited to perform a global sensitivity analysis (GSA) of the SW parameters as discussed in~\ref{sub:scores}, and efficient Bayesian calibration as discussed
+in~\ref{sub:ba_method}.
 
 
 

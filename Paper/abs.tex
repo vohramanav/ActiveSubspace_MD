@@ -1,29 +1,33 @@
 \section*{Abstract}
-We are interested in investigating the impact of uncertainty in the
-Stillinger-Weber potential parameters on NEMD-based predictions of bulk
-thermal conductivity of silicon. 
-However, the analysis typically requires tens of thousands of model evaluations
+This paper develops an efficient methodology for both forward and inverse 
+problems in uncertainty quantification with respect to molecular dynamics simulation.
+Specifically, our objectives are to investigate the impact of uncertainty in the
+Stillinger-Weber (SW) potential parameters on NEMD-based predictions of bulk
+thermal conductivity of silicon (forward problem), and perform a Bayesian calibration
+of these parameters using experimental data (inverse problem). 
+However, both analyses typically require tens of thousands of model evaluations
 and therefore, relying purely on atomistic simulations would be impractical.
-Hence, we focus on an efficient approach for propagating the 
-uncertainty from SW parameters
-to bulk thermal conductivity estimates using NEMD simulations of a Si bar.
-Computational effort is minimized by reducing the
-dimensionality of the input space by computing the so-called active subspace.
+The common strategy of building a surrogate model in the space of the uncertain
+parameters is also unaffordable due to the need for many training evaluations
+using atomistic simulations. Therefore, computational effort 
+is minimized in this paper by reducing the
+dimensionality of the input space of the surrogate model by first computing
+the so-called active subspace.
 Active subspace computation, however, requires gradient information of
 the model output with respect to the uncertain inputs which can be
 computationally challenging. To overcome this challenge, we estimate the
 gradient using a linear regression fit to the available set of
-model evaluations as opposed to a perturbation-based gradient estimation
+model evaluations as opposed to perturbation-based gradient estimation
 (e.g. finite difference, adjoint-based methods etc.) 
 that would require additional model runs. Moreover, 
 we employ an iterative strategy to avoid unnecessary computations once
 a converged active subspace is obtained.
 The active subspace thus computed in an efficient manner is found to be
-1-dimensional, indicating enormous scope for dimension as well as
-associated computational effort reduction. A surrogate model is 
+1-dimensional, indicating enormous scope for dimension reduction and
+computational savings. A surrogate model is 
 then built in the 1-dimensional subspace to help quantify
 the variability of the bulk thermal conductivity, and is shown to have
 reasonable accuracy. The
 active subspace is also used to perform efficient global sensitivity analysis (GSA)
-of the SW parameters. Moreover, we demonstrate its applicability for accelerating
-parameter estimation in a Bayesian setting.  
+of the SW parameters. Finally, we demonstrate the use of active subspace-based
+surrogate model for fast calibration of SW parameters in a Bayesian setting.  

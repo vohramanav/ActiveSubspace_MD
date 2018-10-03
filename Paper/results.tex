@@ -1,16 +1,17 @@
 \section{Results}
 \label{sec:results}
 
-In this section, we present our findings based on the implementation of the efficient computational framework 
-presented earlier in Section~\ref{sec:method}, for identifying an active subspace that captures the variability
+In this section, we present our findings based on the implementation of the efficient UQ computational framework 
+presented earlier in Section~\ref{sec:method}, based on identifying an active subspace that captures the variability
 in bulk thermal conductivity of Si due to uncertainty in the SW potential parameters. As discussed earlier, the
 active subspace helps transform the dependence of the model output, $G$ on a large set of uncertain physical
-inputs into an equivalent function, $\mathcal{Y}$ in the active subspace. Note that dimension reduction is
-accomplished since $\mathcal{Y}$ depends on a much smaller set of independent variables, $\vec\eta$,
-referred to as active variables. While dimension reduction increases computational efficiency, it could be enhanced
+inputs into an equivalent low-dimensional function, $\mathcal{Y}$ in the active subspace. 
+Thus, $\mathcal{Y}$ depends on a much smaller set of independent variables, $\vec\eta$,
+referred to as active variables. While dimension reduction due to active subspace
+ increases computational efficiency, the computation of the subspace itself is further enhanced in efficiency
 by means of a regression fit to the trend exhibited by $\mathcal{Y}(\vec{\eta})$. Since the active subspace is
-observed to be 1-dimensional in the present case, we used a linear regression fit to $\mathcal{Y}(\vec{\eta})$
-to construct a surrogate, $\tilde{\mathcal{Y}}(\vec{\eta})$.
+observed to be 1-dimensional in the present case, a simple linear regression fit is adequate for constructing
+a surrogate model, $\tilde{\mathcal{Y}}(\vec{\eta})$.
 The accuracy of the surrogate was assessed by first evaluating the 
 relative L$^2$ norm of the discrepancy between NEMD-based estimates and surrogate predictions,
 and second, by comparing probability distributions of the bulk thermal conductivity as obtained using
@@ -23,7 +24,7 @@ potential parameters as well as for evaluating a joint likelihood of the importa
 The iterative procedure outlined in Algorithm~\ref{alg:free} was used to compute the active subspace. 
 We began
 with an initial set of 5 samples in the 7-dimensional input space. The Monte Carlo samples were drawn
-from the joint probability distribution of the uncertain SW parameters, considered
+from the joint prior distribution of the uncertain SW parameters, assumed
 to be uniformly distributed in the interval $[0.9\theta_i^\ast,1.1\theta_i^\ast]$, where $\theta_i^\ast$ are the
 nominal values provided in Table~\ref{tab:sw}. 
 %
@@ -39,12 +40,12 @@ $A$ & $B$ & $p$ & $q$ & $\alpha$ & $\lambda$ & $\gamma$ \\
 \label{tab:sw}
 \end{table}
 %
-An initial set of model evaluations was used to estimate the gradient vector of thermal conductivity with
+An initial set of model evaluations was used to estimate the gradient vector of thermal conductivity w.r.t.
 individual components representing the derivative with respect to $\xi_i$ corresponding to $\theta_i$ in
 the physical space. At each iteration, $i$, model evaluations at 5 new samples in the full space were 
 obtained and the quantity, $\vec{\varepsilon}^{(i)}$ was computed using~\eqref{eq:conv}. The iterative
 procedure was terminated once the highest component of $\vec{\varepsilon}^{(i)}$ was found to be smaller than
-the set tolerance, $\tau$ = 0.1. In this case, the process was observed to converge after 4 iterations,
+the specified tolerance, $\tau$ = 0.1. In this case, the process was observed to converge after 4 iterations,
 and required model evaluations at 25 samples, yielding $\max(\vec{\varepsilon}^{(i)})$~=~0.085.
  The resulting active subspace was found to be
 1-dimensional. In Figure~\ref{fig:casfig1}, we plot the components of the dominant eigenvector (left),
@@ -54,7 +55,7 @@ obtained between successive iterations, $i$ and $i-1$ (right) in~\eqref{eq:conv}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{./Figures/free_eigv5}
-\caption{Left: Individual components of the dominant eigenvector that constitutes the 1-dimensional
+\caption{Left: Individual components of the dominant eigenvector that constitute the 1-dimensional
 active subspace. Right: A plot of $\max(\varepsilon^{(i)})$, obtained
 using components of the dominant eigenvector between successive iterations.}
 \label{fig:casfig1}
@@ -105,11 +106,11 @@ of the Si bar ($\mathcal{Y}$) as follows:
 \ee
 %
 The quantity, $\varepsilon_d$, was estimated to be roughly 0.1. In other words, the error introduced
-due to approximating the function, $\mathcal{Y}$ by a surrogate, $\tilde{\mathcal{Y}}$ is about 10$\%$.
+due to approximating the function $\mathcal{Y}$ by a surrogate $\tilde{\mathcal{Y}}$ is about 10$\%$.
 For many applications, this error might be too large, however, it is reasonable and
 potentially acceptable for this problem considering that we are interested in approximating
 the variability in thermal conductivity due to uncertainty in the SW
-parameters. An exact UQ analysis in a 7-dimensional input space for an application involving
+parameters. Uncertainty propagation analysis using a 7-dimensional input space for an application involving
 atomistic simulations would be computationally impractical as discussed earlier in
 Section~\ref{sec:intro}, and highlighted specifically in Table~\ref{tab:effort}.
 
@@ -158,7 +159,8 @@ comparison of distributions in Figure~\ref{fig:level2} confirms that the PDF cap
 estimate as well as the spread in $\kappa$ with reasonable accuracy. Hence, the surrogate based on
 the 1-dimensional active subspace, evaluated earlier in~\ref{sub:cas} can be used to quantify and
 characterize the uncertainty in bulk thermal conductivity of the Si bar due to the uncertainty in the
-SW potential parameters. In the following section, we use the surrogate to estimate the total Sobol'
+SW potential parameters. In the following section, we use the surrogate to estimate the 
+total effect Sobol'
 sensitivity indices of the SW parameters. Additionally, we perform a consistency check by comparing
 these estimates with the normalized activity scores, computed using the converged 1-dimensional
 active subspace. 
@@ -166,7 +168,8 @@ active subspace.
 \subsection{Global Sensitivity Analysis}
 \label{sub:gsa}
 
-The surrogate $\tilde{\mathcal{Y}}(\vec{\eta})$ was used to estimate the total Sobol index, $T_i(G)$ for each
+The surrogate $\tilde{\mathcal{Y}}(\vec{\eta})$ was used to estimate the total effect Sobol'
+ index, $T_i(G)$ for each
 uncertain parameter by mapping 10$^5$ independent Monte Carlo samples in the physical domain
 to the bulk thermal conductivity of the Si bar as discussed earlier in~\ref{subsub:gsa_surr}. 
 Additionally, normalized activity scores ($\nu_{i,p}$) were computed using~\eqref{eq:ac} and~\eqref{eq:nac}.
@@ -176,7 +179,7 @@ Figure~\ref{fig:gsa}.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.45\textwidth]{./Figures/free_as_gsa}
-\caption{A comparative assessment of the Sobol total-effect index, $T_i(G)$, and the normalized
+\caption{A comparative assessment of the total effect Sobol' index, $T_i(G)$, and the normalized
 activity scores, $\tilde{\nu}_{i,p}$, for GSA of the SW potential parameters.}
 \label{fig:gsa}
 \end{center}
@@ -188,52 +191,25 @@ subspace. However, the quantitative agreement in the estimates of $T_i(G)$ and $
 is purely coincidental. The trends observed in Figure~\ref{fig:gsa} indicate
  that the variability in bulk thermal conductivity is predominantly
 due to the uncertainty in $\alpha$, $\lambda$, and $\gamma$. This is also consistent with our earlier
-findings involving GSA using DGSMs~\cite{Vohra:2018b}~(see Figure~7 therein). 
+findings based on total effect Sobol' indices~\cite{Vohra:2018b}~(see Figure~7 therein). 
 This result could be exploited for the purpose of optimal allocation of computing resources to calibrate
 the key contributors ($\alpha$, $\lambda$, and $\gamma$) to the variability in the bulk thermal conductivity
 predictions from NEMD simulations of the Si bar. 
 
-In the following section, we demonstrate an efficient approach that exploits active subspace for 
+In the following section, we implement the efficient approach that exploits active 
+subspace for 
 calibrating the important SW parameters in a Bayesian
-setting. For the purpose of illustration, we focus on estimating posterior distributions of
+setting as discussed earlier in~\ref{sub:ba_method}.
+ For the purpose of illustration, we focus on estimating posterior distributions of
  the two main contributors to the QoI variability, i.e.,
 $\alpha$ and $\gamma$. 
 
-\subsection{Bayesian calibration using Active Subspace}
+\subsection{Bayesian calibration}
 \label{sub:ba}
 
-The Bayesian framework provides a robust machinery for calibrating inputs to a computational model or
-a simulation in the presence of uncertainty. The framework allows incorporation of multiple
-sources of uncertainty in a systematic manner. These sources include prior knowledge as well as
-expert opinion pertaining to the inputs to be calibrated, measurement errors as well as potential noise inherent
-in simulations, and numerical errors as well as model form errors. The objective is to evaluate a joint
-conditional probability distribution of the uncertain inputs to be calibrated, given a set of observations and the
-associated experimental and computational uncertainties. The distribution is referred to as the joint posterior of
-the inputs, and is evaluated using the Bayes' theorem:
-%
-\be
-\mathbb{P}(\bm{\theta}\vert \bm{D}) = 
-\frac{\mathbb{P}(\bm{D}\vert\bm{\theta})}{\mathbb{P}(\vec{D})}\mathbb{P}(\bm{\theta}),
-\ee
-%
-where $\vec{D}$ is the available set of observations. 
-The denominator in the RHS, $\mathbb{P}(\vec{D})$ is the evidence term i.e. the product of the likelihood, 
-$\mathbb{P}(\bm{D}\vert\bm{\theta})$ and the joint prior distribution,
-$\mathbb{P}(\bm{\theta})$, integrated over all possible values of the inputs to be calibrated, $\vec{\theta}$. 
-Hence, $\mathbb{P}(\vec{D})$ is a proportionality term and in practice the joint posterior, 
-$\mathbb{P}(\bm{\theta}\vert \bm{D})$ is usually evaluated up to a proportionality constant as follows:
-%
-\be
-\mathbb{P}(\bm{\theta}\vert \bm{D}) \propto
-\mathbb{P}(\bm{D}\vert\bm{\theta})\mathbb{P}(\bm{\theta}).
-\label{eq:bayes}
-\ee
-%
-Several Markov Chain Monte Carlo based algorithms are available to sample the joint posterior using the
-relationship in~\eqref{eq:bayes}~\cite{Haario:2001, Haario:2006,Xu:2014}.
-However, they typically require tens of thousands of model runs which would be
-impractical for the present application. Here, $\alpha$ and $\gamma$ are considered to be independent and
-uniformly distributed in the intervals, [1.62, 1.98] and [1.08, 1.32] respectively. The joint posterior is thus 
+Herein, the parameters of calibration, $\alpha$ and $\gamma$ are considered to be independent and
+uniformly distributed in the intervals, [1.62, 1.98] and [1.08, 1.32] respectively. The joint posterior,
+$\mathbb{P}(\bm{\theta}\vert \bm{D})$ in ~\eqref{eq:bayes} is thus 
 proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \be
@@ -246,7 +222,8 @@ proportional to the joint likelihood, modeled using a Gaussian distribution:
 $(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}})$ is the discrepancy between 
 NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and measurements~($\kappa_{\tiny{\mbox{E}}}$). 
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
-$\kappa_{\tiny{\mbox{MD}}}$. To overcome this challenge, we exploit the surrogate, 
+$\kappa_{\tiny{\mbox{MD}}}$. As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
+exploiting the surrogate, 
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
 $\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}.
 
@@ -280,10 +257,14 @@ $\kappa_{\tiny{\mbox{E}}}$ at 300~K. An enriched set of data would help improve 
 of the calibration process, and thus refine the posterior distributions of $\alpha$ and $\gamma$.
 However, an active subspace will need to be identified for each temperature at which the data is 
 available, thus requiring a significant amount of computational effort, and is not pursued here. 
+However, it must be noted that since the computational
+effort at each temperature is significantly reduced by dimension reduction as shown here,
+the overall effort is still expected to be several orders of magnitude smaller than 
+that required when using atomistic simulations for calibrating all the SW parameters.
 It is encouraging to note that the joint likelihood obtained using the active subspace methodology
-in this work, exhibits a qualitative as well as quantitative agreement with that computed using
-the same data point, and a reduced-space Polynomial Chaos surrogate with a 5-dimensional
-Legendre polynomial basis in~\cite{Vohra:2018a} (see Figure~11). 
+in this work exhibits qualitative as well as quantitative agreement with that computed using
+the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
+Legendre polynomial basis in~\cite{Vohra:2018a} (see Figure~11 therein). 
 
 
 
