@@ -16,7 +16,7 @@ in bulk thermal conductivity predictions as a function of fewer independent vari
 compared to the original input space. Efficient computation of the active subspace
 was accomplished by estimating the gradient of the bulk thermal conductivity with
 respect to uncertain SW potential parameters, by means of regression. Moreover, the
-computations were performed in an iterative manner whereby, new evaluations at a 
+computations were performed in an iterative manner whereby new evaluations at a 
 small set of samples were generated to refine the active subspace while assessing 
 its convergence at each step.
 Based on the implementation of this approach and the results
@@ -38,13 +38,13 @@ model evaluations. Additionally, the PDF based on the 1-dimensional surrogate wa
 observed to capture the mean, mode, and the uncertainty in the QoI with reasonable accuracy.
 
 \item Global sensitivity analysis results for Sobol' indices using the surrogate, and the
-normalized activity scores were consistent with each other. Specifically, the SW parameters:
+normalized activity scores were consistent with each other. Specifically, the SW parameters
 $\gamma$, $\alpha$, and $\lambda$ were found to be major contributors to the
 uncertainty in the bulk thermal conductivity of Si.
 
 \item It was shown that the active subspace could help accelerate the process
-of Bayesian calibration through dimension reduction and the use of surrogate 
-(as opposed to NEMD simulations) in order to map physical parameters to the QoI.    
+of Bayesian calibration through dimension reduction and the use of a surrogate 
+(as opposed to NEMD simulations) to map physical parameters to the QoI.    
 
 \end{enumerate}
 %
@@ -54,4 +54,7 @@ the importance of UQ in atomistic simulation predictions. Successful implementat
 computational framework aimed at dimension reduction presented in this work is remarkably
 encouraging. Future extensions to this work would involve enhancing the efficiency as well
 as the accuracy of the computational framework through its implementation to more complex,
-higher dimensional applications. 
+higher dimensional applications. Although the application focus of this work was the prediction of
+bulk thermal conductivity of Si using non-equilibrium molecular dynamics simulations, the proposed
+methodology is general and can be applied to a wide variety of application problems with expensive 
+simulation models. 

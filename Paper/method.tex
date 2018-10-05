@@ -216,8 +216,12 @@ reduction as a result of the proposed methodology would help reduce the number o
 to construct the surrogate. Moreover, in the forward problem, a large number of samples are typically
 required to characterize the variability in the QoI due to input uncertainty. The computational
 effort associated with forward uncertainty propagation is significantly reduced in the active subspace,
-especially in the case of a GP surrogate. Furthermore, the surrogate can be exploited to perform a GSA
-as discussed further below in~\ref{sub:scores}. 
+especially in the case of a GP surrogate\footnote{A GP surrogate carries the training data with it, in
+order to calculate the covariance matrices w.r.t. the prediction point, whereas regression models such as
+polynomial chaos only carry the coefficients derived from the training data; as a result, the computational
+savings in the forward problem due to active subspace is much greater in the case of a GP surrogate
+compared to a polynomial chaos surrogate.}. Furthermore, the surrogate can be exploited to perform GSA
+as discussed below in~\ref{sub:scores}. 
 
 \subsection{GSA using the Active Subspace}
 \label{sub:scores} 
@@ -290,14 +294,18 @@ approach, in section~\ref{sec:results}.
 \subsection{Bayesian calibration using the Active Subspace}
 \label{sub:ba_method}
 
-The Bayesian framework provides a robust machinery for calibrating inputs to a computational model or
+The Bayesian framework provides a robust machinery for calibrating unmeasured inputs to 
+or unknown parameters of a computational model or
 a simulation in the presence of uncertainty. The framework allows incorporation of multiple
-sources of uncertainty in a systematic manner. These sources include prior knowledge as well as
-expert opinion pertaining to the inputs to be calibrated, measurement errors as well as potential noise inherent
-in simulations, and numerical errors as well as model form errors. The objective is to evaluate the joint
-conditional probability distribution of the uncertain inputs to be calibrated, given a set of observations and the
-associated experimental and computational uncertainties. This distribution is referred to as the joint posterior of
-the inputs, and is evaluated using the Bayes' theorem:
+sources of uncertainty in a systematic manner. These sources include prior knowledge
+(including expert opinion)
+ pertaining to the inputs or parameters to be calibrated, output measurement errors, potential noise inherent
+in simulations, and numerical errors and model form errors in the computational model.
+ The objective is to evaluate the joint
+conditional probability distribution of the uncertain inputs or parameters to be calibrated,
+given a set of observations and the
+associated experimental and computational uncertainties. This distribution is referred to as
+the joint posterior of the inputs/parameters, and is evaluated using the Bayes' theorem:
 %
 \be
 \mathbb{P}(\bm{\theta}\vert \bm{D}) = 
@@ -324,8 +332,8 @@ impractical for the present application. The active subspace can be used to miti
 computational effort in two ways: Firstly, as a result of GSA, we can identify important parameters based on
 their contributions to the variability in the QoI. The process of Bayesian parameter estimation
 can thus be expedited signficantly by focusing on calibrating only the important parameters while fixing other
-parameters at their nominal values. Secondly, the
-surrogate can be used in lieu of the model in order to reduce the computational effort associated with
+parameters at their nominal values. Secondly, the active subspace-based low-dimensional
+surrogate can be used in lieu of the model in order to reduce the computational effort associated with the
 likelihood estimation. In Section~\ref{sec:results}, we implement the proposed methodology to calibrate the
 important SW parameters in a Bayesian setting. 
 

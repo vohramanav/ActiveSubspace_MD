@@ -25,7 +25,7 @@ of the system since it corresponds to an infinitely large system (in theory).
 
 Although widely used, severe limitations are associated with the direct method.
 The validity of the linear extrapolation procedure is not well established. Recent
-investigations have revealed the existence of a non-linear trend in the $\kappa^{-1}$-$L^{-1}$
+investigations have revealed the existence of a non-linear trend in the $\kappa^{-1}$ vs. $L^{-1}$
 relationship especially at large values of $L$ for Si~\cite{Sellan:2010}. Additionally, 
 thermal conductivity estimate for a given size depends upon the choice of a potential
 function and associated values of its parameters. Specifically for Si, the Stillinger-Weber (SW)
@@ -102,7 +102,7 @@ dimensionality of the problem.
 In our earlier effort, we presented a strategy~\cite{Vohra:2018b}
 for constructing a surrogate for thermal conductivity dependence on the SW parameters
 in a reduced space, evaluated using the derivative-based global sensitivity measures
-(DGSMs)~\cite{Vohra:2018a}. The focus there was on determining the relative importance of the
+(DGSMs)~\cite{Vohra:2018a}. The focus in that study was on determining the relative importance of the
 parameters and fixing the unimportant parameters at their nominal values. In contrast, the
 framework presented in this study aims to identify key directions in the input space along which the
 QoI predominantly varies. The set of directions constitute the so-called 
@@ -139,11 +139,14 @@ differentiable in the considered intervals for $\alpha$ and $\gamma$.
 Therefore, to mitigate the computational effort, we estimate the gradient
 using a linear regression fit to the available set of model evaluations; as a result, we do not 
 require additional atomistic evaluations at neighboring points as in the case of perturbation-based
-derivative computation methods such as finite difference. Using the strategy, we build a surrogate
-model in the active subspace using a very small number of atomistic simulations, and also enable
-fast uncertainty quantification (forward problem) and Bayesian estimation of SW parameters (inverse
-problem) due to the reduced dimensionality. The active subspace-based surrogate model is also used
-to compute global sensitivity measures, which are found to be consistent with earlier estimates 
+derivative computation methods such as finite difference. We identify the active subspace
+using the gradient information, and build a surrogate
+model in the active subspace using a very small number of atomistic simulations
+due to the reduced dimension. The active subspace-based surrogate model enables fast
+uncertainty propagation and sensitivity analysis (forward problem) and Bayesian estimation
+of SW parameters (inverse problem) due to the reduced dimensionality. 
+The global sensitivity measures computed using the
+active subspace are found to be consistent with earlier estimates 
 based on Sobol' indices~\cite{Vohra:2018b}.
 
 The remainder of this article is organized as follows. In Section~\ref{sec:bg}, we provide details

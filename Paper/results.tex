@@ -2,11 +2,11 @@
 \label{sec:results}
 
 In this section, we present our findings based on the implementation of the efficient UQ computational framework 
-presented earlier in Section~\ref{sec:method}, based on identifying an active subspace that captures the variability
+presented in Section~\ref{sec:method}, based on identifying an active subspace that captures the variability
 in bulk thermal conductivity of Si due to uncertainty in the SW potential parameters. As discussed earlier, the
-active subspace helps transform the dependence of the model output, $G$ on a large set of uncertain physical
-inputs into an equivalent low-dimensional function, $\mathcal{Y}$ in the active subspace. 
-Thus, $\mathcal{Y}$ depends on a much smaller set of independent variables, $\vec\eta$,
+active subspace helps transform the dependence of the model output $G$ on a large set of uncertain physical
+inputs into an equivalent low-dimensional function $\mathcal{Y}$ in the active subspace. 
+Thus $\mathcal{Y}$ depends on a much smaller set of independent variables $\vec\eta$,
 referred to as active variables. While dimension reduction due to active subspace
  increases computational efficiency, the computation of the subspace itself is further enhanced in efficiency
 by means of a regression fit to the trend exhibited by $\mathcal{Y}(\vec{\eta})$. Since the active subspace is
@@ -14,8 +14,8 @@ observed to be 1-dimensional in the present case, a simple linear regression fit
 a surrogate model, $\tilde{\mathcal{Y}}(\vec{\eta})$.
 The accuracy of the surrogate was assessed by first evaluating the 
 relative L$^2$ norm of the discrepancy between NEMD-based estimates and surrogate predictions,
-and second, by comparing probability distributions of the bulk thermal conductivity as obtained using
-model evaluations, and the surrogate. The surrogate was exploited to perform a GSA of the SW
+and second, by comparing probability distributions of the bulk thermal conductivity obtained using
+model evaluations and the surrogate. The surrogate was exploited to perform a GSA of the SW
 potential parameters as well as for evaluating a joint likelihood of the important parameters.
 
 \subsection{Computing the Active Subspace}
@@ -89,14 +89,14 @@ Thus, the second largest eigenvalue is roughly two orders of magnitude smaller t
 indicating a 1-dimensional active subspace. Furthermore, the trends in the SSP seem to have been captured
 reasonably well using a linear regression fit which further confirms the existence of a 1-dimensional active
 subspace in this case. In the following section, we verify the accuracy of the
-surrogate, $\tilde{\mathcal{Y}}$. 
+surrogate $\tilde{\mathcal{Y}}$. 
 
 
 \subsection{Surrogate assessment}
 \label{sub:ver}
 
-The surrogate, $\tilde{\mathcal{Y}}$, illustrated in Figure~\ref{fig:casfig2}~(right) 
-is assessed for accuracy at two levels: First, we perform a low-level assessment by estimating
+The surrogate $\tilde{\mathcal{Y}}$ illustrated in Figure~\ref{fig:casfig2}~(right) 
+is assessed for accuracy at two levels: First, we estimate
  the relative L$^2$ norm of the difference
 ($\varepsilon_d$) between surrogate predictions and NEMD-based estimates of bulk thermal conductivity 
 of the Si bar ($\mathcal{Y}$) as follows:
@@ -105,16 +105,16 @@ of the Si bar ($\mathcal{Y}$) as follows:
 \varepsilon_d = \frac{\|\mathcal{Y}(\bm{\eta}) - \tilde{\mathcal{Y}}(\bm{\eta})\|_2}{\|\mathcal{Y}(\bm{\eta})\|_2}
 \ee
 %
-The quantity, $\varepsilon_d$, was estimated to be roughly 0.1. In other words, the error introduced
+The quantity $\varepsilon_d$ was estimated to be roughly 0.1. In other words, the error introduced
 due to approximating the function $\mathcal{Y}$ by a surrogate $\tilde{\mathcal{Y}}$ is about 10$\%$.
-For many applications, this error might be too large, however, it is reasonable and
+For many applications, this error might be too large; however, it is reasonable and
 potentially acceptable for this problem considering that we are interested in approximating
 the variability in thermal conductivity due to uncertainty in the SW
 parameters. Uncertainty propagation analysis using a 7-dimensional input space for an application involving
 atomistic simulations would be computationally impractical as discussed earlier in
 Section~\ref{sec:intro}, and highlighted specifically in Table~\ref{tab:effort}.
 
-Second, a higher level assessment of $\tilde{\mathcal{Y}}$ is performed wherein
+A second assessment of $\tilde{\mathcal{Y}}$ is performed wherein
 the first-order and second-order 
 statistics as well as probability distributions, obtained using the
 surrogate and the set of available model evaluations at 35 samples in the 7-dimensional
@@ -191,14 +191,13 @@ subspace. However, the quantitative agreement in the estimates of $T_i(G)$ and $
 is purely coincidental. The trends observed in Figure~\ref{fig:gsa} indicate
  that the variability in bulk thermal conductivity is predominantly
 due to the uncertainty in $\alpha$, $\lambda$, and $\gamma$. This is also consistent with our earlier
-findings based on total effect Sobol' indices~\cite{Vohra:2018b}~(see Figure~7 therein). 
+findings based on the derivative-based global sensitivity measures~\cite{Vohra:2018b}~(see Figure~7 therein). 
 This result could be exploited for the purpose of optimal allocation of computing resources to calibrate
 the key contributors ($\alpha$, $\lambda$, and $\gamma$) to the variability in the bulk thermal conductivity
 predictions from NEMD simulations of the Si bar. 
 
-In the following section, we implement the efficient approach that exploits active 
-subspace for 
-calibrating the important SW parameters in a Bayesian
+In the following section, we use the active subspace-based surrogate model
+for calibrating the important SW parameters in a Bayesian
 setting as discussed earlier in~\ref{sub:ba_method}.
  For the purpose of illustration, we focus on estimating posterior distributions of
  the two main contributors to the QoI variability, i.e.,
@@ -207,7 +206,7 @@ $\alpha$ and $\gamma$.
 \subsection{Bayesian calibration}
 \label{sub:ba}
 
-Herein, the parameters of calibration, $\alpha$ and $\gamma$ are considered to be independent and
+Herein, the parameters for calibration, $\alpha$ and $\gamma$ are considered to be independent and
 uniformly distributed in the intervals, [1.62, 1.98] and [1.08, 1.32] respectively. The joint posterior,
 $\mathbb{P}(\bm{\theta}\vert \bm{D})$ in ~\eqref{eq:bayes} is thus 
 proportional to the joint likelihood, modeled using a Gaussian distribution:
@@ -223,7 +222,7 @@ $(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}})$ is the discrepancy betw
 NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and measurements~($\kappa_{\tiny{\mbox{E}}}$). 
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
 $\kappa_{\tiny{\mbox{MD}}}$. As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
-exploiting the surrogate, 
+exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
 $\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}.
 
