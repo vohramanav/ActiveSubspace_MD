@@ -13,19 +13,7 @@ using atomistic simulations. Therefore, computational effort
 is minimized in this paper by reducing the
 dimensionality of the input space of the surrogate model by first computing
 the so-called active subspace.
-Active subspace computation, however, requires gradient information of
-the model output with respect to the uncertain inputs which can be
-computationally challenging. To overcome this challenge, we estimate the
-gradient using a linear regression fit to the available set of
-model evaluations as opposed to perturbation-based gradient estimation
-(e.g. finite difference, adjoint-based methods etc.) 
-that would require additional model runs. Moreover, 
-the active subspace is computed in an iterative manner whereby model
-evaluations at a small set of new samples are generated, and convergence
-of the resulting subspace is assessed at each iteration. This approach is
-aimed at  avoiding unnecessary computations once convergence has been
-established.
-The active subspace thus computed in an efficient manner is found to be
+The active subspace is found to be
 1-dimensional, indicating enormous scope for dimension reduction and
 computational savings. A surrogate model is 
 then built in the 1-dimensional subspace to help quantify

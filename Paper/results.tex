@@ -206,9 +206,9 @@ $\alpha$ and $\gamma$.
 \subsection{Bayesian calibration}
 \label{sub:ba}
 
-Herein, the parameters for calibration, $\alpha$ and $\gamma$ are considered to be independent and
-uniformly distributed in the intervals, [1.62, 1.98] and [1.08, 1.32] respectively. The joint posterior,
-$\mathbb{P}(\bm{\theta}\vert \bm{D})$ in ~\eqref{eq:bayes} is thus 
+Herein, the parameters for calibration, $\alpha$, $\lambda$ and $\gamma$ are considered to be independent and
+uniformly distributed in the intervals, [1.62, 1.98], [18.9, 23.1] and [1.08, 1.32] respectively.
+The joint posterior, $\mathbb{P}(\bm{\theta}\vert \bm{D})$ in ~\eqref{eq:bayes} is thus 
 proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \be
@@ -226,32 +226,32 @@ exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
 $\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}.
 
-The joint likelihood was evaluated on a 2D cartesian grid containing 40$\times$40 samples, and is shown
-using a contour plot in Figure~\ref{fig:like}(a). Note that 
+The joint likelihood was evaluated on a 2D Cartesian grid containing 40$\times$40 samples, and is shown
+using a contour plots in Figure~\ref{fig:like}. Note that 
 $\kappa_{\tiny{\mbox{E}}}$~=~149~W/m/K~\cite{Shanks:1963} at 300~K, and a $\sigma$ value, 
 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, was used to evaluate the joint likelihood.
-Marginal likelihoods for  $\alpha$ and $\gamma$ are also
-shown in Figures,~\ref{fig:like}(b) and~\ref{fig:like}(c) respectively. 
+Marginal likelihoods for  $\alpha$, $\lambda$ and $\gamma$ are also
+shown in Figure,~\ref{fig:like}. 
 %
 \begin{figure}[htbp]
  \begin{center}
- \begin{tabular}{ccc}
+% \begin{tabular}{ccc}
   \includegraphics[width=0.33\textwidth]{./Figures/gl_al}
-  &
-  \includegraphics[width=0.33\textwidth]{./Figures/gl}
-  &
+%  &
+  \includegraphics[width=0.33\textwidth]{./Figures/gl_ag}
+%  &
   \includegraphics[width=0.33\textwidth]{./Figures/gl_lg}
   \\
-  \includegraphics[width=0.30\textwidth]{./Figures/pdf_alpha}
-  &
-  \includegraphics[width=0.30\textwidth]{./Figures/pdf_lambda}
-  &
-  \includegraphics[width=0.30\textwidth]{./Figures/pdf_gamma}
-  \end{tabular}
-\caption{Top: Joint likelihood of ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$),
+  \includegraphics[width=0.27\textwidth]{./Figures/pdf_alpha}
+%  &
+  \includegraphics[width=0.27\textwidth]{./Figures/pdf_lambda}
+%  &
+  \includegraphics[width=0.27\textwidth]{./Figures/pdf_gamma}
+%  \end{tabular}
+\caption{Joint likelihood of ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$),
 estimated using Eq.~\ref{eq:like} is plotted
-on a (40$\times$40) 2D cartesian grid. The maximum likelihood estimate (MLE) is also highlighted.
-Bottom: Marginal likelihoods for $\alpha$, $\lambda$ and $\gamma$.}
+on a (40$\times$40) 2D Cartesian grid. The maximum likelihood estimate (MLE) is also highlighted.
+Bottom row: Marginal likelihoods for $\alpha$, $\lambda$ and $\gamma$.}
 \label{fig:like}
 \end{center}
 \end{figure}
@@ -261,7 +261,8 @@ $\kappa_{\tiny{\mbox{E}}}$ at 300~K. The same procedure for
 efficient parameter estimation could be repeated when data at multiple 
 temperatures is used for parameter estimation. However, an active
 subspace at each temperature will have to be identified. 
-It is encouraging to note that the joint likelihood obtained using the active subspace methodology
+It is encouraging to note that the joint likelihood of $\alpha$ and $\gamma$,
+obtained using the active subspace methodology
 in this work exhibits qualitative as well as quantitative agreement with that computed using
 the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
 Legendre polynomial basis in~\cite{Vohra:2018a} (see Figure~11 therein). 
