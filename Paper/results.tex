@@ -219,18 +219,31 @@ proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \noindent where $\sigma$ is the standard deviation associated with measurement error, and
 $(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}})$ is the discrepancy between 
-NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and measurements~($\kappa_{\tiny{\mbox{E}}}$). 
+NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and the calibration data~($\kappa_{\tiny{\mbox{E}}}$). 
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
 $\kappa_{\tiny{\mbox{MD}}}$. As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
 exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
-$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}.
+$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}. Therefore, we account for the error~($\varepsilon_\text{\tiny{SE}}$)
+due to surrogate-based approximation of the bulk thermal conductivity in the active subspace. 
+The surrogate error $\varepsilon_\text{\tiny{SE}}$ was estimated by fitting a cubic polynomial to the
+discrepancy at 25 points between the straight line $\tilde{\mathcal{Y}}$ and the function $\mathcal{Y}$
+illustrated in Figure~\ref{fig:casfig2}~(right). Additionally, we account for the 
+model error~($\varepsilon_\text{\tiny{ME}}$) estimated using the response surface constructed in~\cite{Vohra:2018a} at 
+300~K, and simulation conditions specified in Table~\ref{tab:input}. Bulk thermal conductivity 
+estimates~($\kappa_\text{\tiny{MD}}^{c}$), corrected for surrogate error and model error were evaluated as follows:
+%
+\be
+\kappa_\text{\tiny{MD}}^{c} = \kappa_{\tiny{\mbox{MD}}} + \varepsilon_\text{\tiny{SE}} + \varepsilon_\text{\tiny{ME}}
+\ee
+%
 
-The joint likelihood was evaluated on a 2D Cartesian grid containing 40$\times$40 samples, and is shown
-using a contour plots in Figure~\ref{fig:like}. Note that 
-$\kappa_{\tiny{\mbox{E}}}$~=~149~W/m/K~\cite{Shanks:1963} at 300~K, and a $\sigma$ value, 
-0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, was used to evaluate the joint likelihood.
-Marginal likelihoods for  $\alpha$, $\lambda$ and $\gamma$ are also
+The joint likelihood was evaluated using $\kappa_\text{\tiny{MD}}^{c}$ on a 2D Cartesian grid containing
+40$\times$40 samples, and is shown
+using a contour plots in Figure~\ref{fig:like}. Experimental value of 245~W/m/K for the
+bulk thermal conductivity of silicon at 300~K~($\kappa_{\tiny{\mbox{E}}}$)~\cite{Volz:1999},
+and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, were used.
+Marginal likelihoods of  $\alpha$, $\lambda$ and $\gamma$ are also
 shown in Figure,~\ref{fig:like}. 
 %
 \begin{figure}[htbp]
@@ -263,7 +276,7 @@ temperatures is used for parameter estimation. However, an active
 subspace at each temperature will have to be identified. 
 It is encouraging to note that the joint likelihood of $\alpha$ and $\gamma$,
 obtained using the active subspace methodology
-in this work exhibits qualitative as well as quantitative agreement with that computed using
+in this work exhibits a qualitative agreement with that computed using
 the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
 Legendre polynomial basis in~\cite{Vohra:2018a} (see Figure~11 therein). 
 
