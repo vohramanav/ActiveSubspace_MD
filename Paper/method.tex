@@ -264,7 +264,8 @@ with negligible effort.
 Several recent efforts have
 focused on an efficient computation of the first-order and total effect Sobol' indices
 using polynomial chaos surrogates~\cite{Sudret:2008}, density-based sensitivity measures~\cite{Plischke:2013},
- randomized orthogonal arrays~\cite{Tissot:2015}, and direct computation from the input-output 
+randomized orthogonal arrays~\cite{Tissot:2015}, and direct computation from 
+the input-output 
  samples~\cite{Li:2016}. Additionally,
 derivative-based global sensitivity measures (DGSMs)~\cite{Sobol:2009, Lamboni:2013}
 have been developed to estimate upper bounds on the total effect Sobol' indices using a fraction of computational effort
@@ -325,16 +326,32 @@ $\mathbb{P}(\bm{\theta}\vert \bm{D})$ is usually evaluated up to a proportionali
 \label{eq:bayes}
 \ee
 %
-Several Markov Chain Monte Carlo-based algorithms are available to sample the joint posterior using the
-relationship in~\eqref{eq:bayes}~\cite{Haario:2001, Haario:2006,Xu:2014}.
+Several Markov Chain Monte Carlo-based algorithms are available to sample the joint posterior
+using the relationship in~\eqref{eq:bayes}~\cite{Haario:2001, Haario:2006,Xu:2014}.
 However, they typically require tens of thousands of model runs which would be
 impractical for the present application. The active subspace can be used to mitigate the
-computational effort in two ways: Firstly, as a result of GSA, we can identify important parameters based on
-their contributions to the variability in the QoI. The process of Bayesian parameter estimation
-can thus be expedited significantly by focusing on calibrating only the important parameters while fixing other
-parameters at their nominal values. Secondly, the active subspace-based low-dimensional
-surrogate can be used in lieu of the model in order to reduce the computational effort associated with the
-likelihood estimation. In Section~\ref{sec:results}, we implement the proposed methodology to calibrate the
+computational effort in two ways: Firstly, as a result of GSA, we can identify important 
+parameters based on their contributions to the variability in the QoI. The process of Bayesian
+parameter estimation can thus be expedited significantly by focusing on calibrating only the 
+important parameters while fixing other parameters at their nominal values. Secondly, 
+the active subspace-based low-dimensional surrogate can be used in lieu of the model in
+order to reduce the computational effort associated with the
+likelihood estimation. Hence, in the calibration procedure, we account for the 
+error~($\varepsilon_\text{\tiny{SE}}$)
+incurred due to surrogate-based approximation of the model prediction as well as the
+physics-based model error~($\varepsilon_\text{\tiny{ME}}$).
+In accordance with the Kennedy-O'Hagan approach~\cite{Kennedy:2001}, the two errors
+are considered as additive; and improved NEMD-based estimates of the bulk thermal
+conductivity ($\kappa_\text{MD}^c$) are obtained using the following equation as discussed
+in~\cite{Liang:2011,Nannapaneni:2016}:
+%
+\be
+\kappa_\text{\tiny{MD}}^{c} = \kappa_{\tiny{\mbox{MD}}} + \varepsilon_\text{\tiny{SE}} + \varepsilon_\text{\tiny{ME}}
+\label{eq:kc}
+\ee
+%
+
+In Section~\ref{sec:results}, we implement the proposed methodology to calibrate the
 important SW parameters in a Bayesian setting. 
 
 

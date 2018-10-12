@@ -224,19 +224,19 @@ Note that repeated evaluations of the joint likelihood can be remarkably challen
 $\kappa_{\tiny{\mbox{MD}}}$. As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
 exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
-$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}. Therefore, we account for the error~($\varepsilon_\text{\tiny{SE}}$)
-due to surrogate-based approximation of the bulk thermal conductivity in the active subspace. 
-The surrogate error $\varepsilon_\text{\tiny{SE}}$ was estimated by fitting a cubic polynomial to the
-discrepancy at 25 points between the straight line $\tilde{\mathcal{Y}}$ and the function $\mathcal{Y}$
-illustrated in Figure~\ref{fig:casfig2}~(right). Additionally, we account for the 
-model error~($\varepsilon_\text{\tiny{ME}}$) estimated using the response surface constructed in~\cite{Vohra:2018a} at 
-300~K, and simulation conditions specified in Table~\ref{tab:input}. Bulk thermal conductivity 
-estimates~($\kappa_\text{\tiny{MD}}^{c}$), corrected for surrogate error and model error were evaluated as follows:
-%
-\be
-\kappa_\text{\tiny{MD}}^{c} = \kappa_{\tiny{\mbox{MD}}} + \varepsilon_\text{\tiny{SE}} + \varepsilon_\text{\tiny{ME}}
-\ee
-%
+$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}. Additionally we account for the 
+error~($\varepsilon_\text{\tiny{SE}}$) due to
+surrogate-based approximation of the model output, and the physics-based model
+error~($\varepsilon_\text{\tiny{ME}}$) using~\eqref{eq:kc}.
+
+The surrogate error $\varepsilon_\text{\tiny{SE}}$ in this case is a normally distributed random
+variable with mean 0. The variance was estimated using the discrepancy between the surrogate, $\mathcal{Y}$
+and the function $\tilde{\mathcal{Y}}$ plotted in Figure~\ref{fig:casfig2}~(right).
+Physics-based model error~($\varepsilon_\text{\tiny{ME}}$) was estimated using a polynomial chaos
+response surface constructed in~\cite{Vohra:2018a} at 
+300~K, and simulation conditions specified in Table~\ref{tab:input}. Note that the response surface
+captured the dependence of model discrepancy on the size of the Si bar and the applied thermal gradient
+(see Figure~4 in~\cite{Vohra:2018a}).
 
 The joint likelihood was evaluated using $\kappa_\text{\tiny{MD}}^{c}$ on a 2D Cartesian grid containing
 40$\times$40 samples, and is shown
@@ -278,7 +278,7 @@ It is encouraging to note that the joint likelihood of $\alpha$ and $\gamma$,
 obtained using the active subspace methodology
 in this work exhibits a qualitative agreement with that computed using
 the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
-Legendre polynomial basis in~\cite{Vohra:2018a} (see Figure~11 therein). 
+Legendre polynomial basis in~(see Figure~11 in~\cite{Vohra:2018a}). 
 
 
 
