@@ -125,7 +125,7 @@ in Algorithm~\ref{alg:free}.
   \begin{algorithmic}[1]
 \Require $\tau$
 \Ensure $\hat{\mat{\Lambda}}$, $\hat{\mat{W}}$, $\bm{\nu}_p(G)$ %$\eta$. %
-    \Procedure{Gradient-free}{}
+    \Procedure{Subspace Computation}{}
     \State Set $k$ = 0
 	\State Draw $n_k$ random samples, $\{\bm{\xi}_i\}_{i=1}^{n_k}$ 
          according to $\pi_{\bm{\xi}}$. 
@@ -339,21 +339,31 @@ order to reduce the computational effort associated with the
 likelihood estimation. Hence, in the calibration procedure, we account for the 
 error~($\varepsilon_\text{\tiny{SE}}$)
 incurred due to surrogate-based approximation of the model prediction as well as the
-physics-based model error~($\varepsilon_\text{\tiny{ME}}$).
+physics-based model error~($\varepsilon_\text{\tiny{MD}}$).
 In accordance with the Kennedy-O'Hagan approach~\cite{Kennedy:2001}, the two errors
-are considered as additive; and improved NEMD-based estimates of the bulk thermal
-conductivity ($\kappa_\text{MD}^c$) are obtained using the following equation as discussed
-in~\cite{Liang:2011,Nannapaneni:2016}:
+are considered as additive. The model predictions based on NEMD simulations are
+corrected for the physics-based model error as follows:
 %
 \be
-\kappa_\text{\tiny{MD}}^{c} = \kappa_{\tiny{\mbox{MD}}} + \varepsilon_\text{\tiny{SE}} + \varepsilon_\text{\tiny{ME}}
-\label{eq:kc}
+\kappa_\text{MD}^c = \kappa_\text{MD} + \varepsilon_\text{MD}
+\label{eq:like1}
 \ee
 %
-
-In Section~\ref{sec:results}, we implement the proposed methodology to calibrate the
-important SW parameters in a Bayesian setting. 
-
-
+The observed value of bulk thermal conductivity of silicon~($\kappa_\text{obs}$) is expressed in
+terms of corrected model prediction~($\kappa_\text{MD}^c$), surrogate model error~($\varepsilon_\text{SE}$),
+and the measurement  noise~($\varepsilon_\text{obs}$) as follows~\cite{Liang:2011,Nannapaneni:2016}:
+%
+\be
+\kappa_\text{obs} = \kappa_\text{MD}^c + \varepsilon_\text{SE} + \varepsilon_\text{obs}
+\label{eq:like2}
+\ee
+%
+Based on the residual analysis discussed in~\cite{Haldar:2000}, the surrogate error is considered to 
+be normally distributed with a zero mean and a variance estimated using the discrepancy between
+the surrogate, $\tilde{\mathcal{Y}}$ and the function, $\mathcal{Y}$ plotted in 
+Figure~\ref{fig:casfig2}~(right). The measurement error, $\varepsilon_\text{obs}$ is also
+considered to be normally distributed. Since the likelihood is a function of the discrepancy,
+($\kappa_\text{obs} - \kappa_\text{MD}^c$), we consider a normal distribution to 
+estimate the likelihood using~\eqref{eq:like1} and~\eqref{eq:like2} in Section~\ref{sec:results}.
 
 

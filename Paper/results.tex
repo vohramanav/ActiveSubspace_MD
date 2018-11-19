@@ -197,55 +197,52 @@ the key contributors ($\alpha$, $\lambda$, and $\gamma$) to the variability in t
 predictions from NEMD simulations of the Si bar. 
 
 In the following section, we use the active subspace-based surrogate model
-for calibrating the important SW parameters in a Bayesian
-setting as discussed earlier in~\ref{sub:ba_method}.
- For the purpose of illustration, we focus on estimating posterior distributions of
- the two main contributors to the QoI variability, i.e.,
-$\alpha$ and $\gamma$. 
+for calibrating the important SW parameters ($\alpha$, $\lambda$, and $\gamma$)
+in a Bayesian setting as discussed earlier in~\ref{sub:ba_method}.
 
 \subsection{Bayesian calibration}
 \label{sub:ba}
 
 Herein, the parameters for calibration, $\alpha$, $\lambda$ and $\gamma$ are considered to be independent and
 uniformly distributed in the intervals, [1.62, 1.98], [18.9, 23.1] and [1.08, 1.32] respectively.
-The joint posterior, $\mathbb{P}(\bm{\theta}\vert \bm{D})$ in ~\eqref{eq:bayes} is thus 
+The joint posterior, $\mathbb{P}(\bm{\theta}\vert \bm{D})$ in~\eqref{eq:bayes} is thus 
 proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \be
 \mathbb{P}(\bm{D}\vert\bm{\theta}) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(\kappa_{\tiny{\mbox{E}}} - 
-\kappa_{\tiny{\mbox{MD}}})^2}{2\sigma^2}\right],
+\kappa_{\tiny{\mbox{MD}}}^c)^2}{2\sigma^2}\right],
 \label{eq:like}
 \ee
 %
 \noindent where $\sigma$ is the standard deviation associated with measurement error, and
-$(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}})$ is the discrepancy between 
-NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}$) and the calibration data~($\kappa_{\tiny{\mbox{E}}}$). 
+$(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}}^c)$ is the discrepancy between 
+NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}^c$) corrected for physics-based model error, 
+and the calibration data~($\kappa_{\tiny{\mbox{E}}}$). 
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
-$\kappa_{\tiny{\mbox{MD}}}$. As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
+$\kappa_{\tiny{\mbox{MD}}}$ (see~\eqref{eq:like1}). 
+As mentioned earlier in~\ref{sub:ba_method}, we overcome this challenge by
 exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
-$\kappa_{\tiny{\mbox{MD}}}$, in~\eqref{eq:like}. Additionally we account for the 
-error~($\varepsilon_\text{\tiny{SE}}$) due to
-surrogate-based approximation of the model output, and the physics-based model
-error~($\varepsilon_\text{\tiny{ME}}$) to compute corrected estimates of 
-$\kappa_{\tiny{\mbox{MD}}}$ for the two errors, i.e. $\kappa_{\tiny{\mbox{MD}}}^c$
-using~\eqref{eq:kc}.
+$\kappa_{\tiny{\mbox{MD}}}^c$, in~\eqref{eq:like}. Hence, the likelihood estimation in~\eqref{eq:like}
+accounts for the errors due to surrogate-based approximation~($\varepsilon_\text{\tiny{SE}}$), and
+physics-based model error~($\varepsilon_\text{\tiny{MD}}$) using~\eqref{eq:like1}~and~\eqref{eq:like2}.
 
 The surrogate error $\varepsilon_\text{\tiny{SE}}$ in this case is a normally distributed random
 variable with mean 0. The variance was estimated to be 1.533 using discrepancy estimates, 
 ($\mathcal{Y}-\tilde{\mathcal{Y}}$), at the 25 points where NEMD data is available.  
-Physics-based model error~($\varepsilon_\text{\tiny{ME}}$) was estimated using a polynomial chaos
+Physics-based model error~($\varepsilon_\text{\tiny{MD}}$) was estimated using a polynomial chaos
 response surface constructed in~\cite{Vohra:2018a} at 
 300~K, and simulation conditions specified in Table~\ref{tab:input}. Note that the response surface
 captured the dependence of model discrepancy on the size of the Si bar and the applied thermal gradient
 (see Figure~4 in~\cite{Vohra:2018a}).
 
-The joint likelihood was evaluated using $\kappa_\text{\tiny{MD}}^{c}$ on a 2D Cartesian grid containing
-40$\times$40 samples, and is shown
-using a contour plots in Figure~\ref{fig:like}. Experimental value of 245~W/m/K for the
+The joint posteriors: ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$)
+ were evaluated  on a 2D Cartesian grid containing
+40$\times$40 samples, and are shown
+using contour plots in Figure~\ref{fig:like}. Experimental value of 245~W/m/K for the
 bulk thermal conductivity of silicon at 300~K~($\kappa_{\tiny{\mbox{E}}}$)~\cite{Volz:1999},
 and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, were used.
-Marginal likelihoods of  $\alpha$, $\lambda$ and $\gamma$ are also
+Marginal posteriors of  $\alpha$, $\lambda$ and $\gamma$ are also
 shown in Figure,~\ref{fig:like}. 
 %
 \begin{figure}[htbp]
@@ -263,51 +260,21 @@ shown in Figure,~\ref{fig:like}.
 %  &
   \includegraphics[width=0.27\textwidth]{./Figures/pdf_gamma}
 %  \end{tabular}
-\caption{Joint likelihood of ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$),
+\caption{Joint posteriors of ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$),
 estimated using Eq.~\ref{eq:like} is plotted
-on a (40$\times$40) 2D Cartesian grid. The maximum likelihood estimate (MLE) is also highlighted.
-Bottom row: Marginal likelihoods for $\alpha$, $\lambda$ and $\gamma$.}
+on a (40$\times$40) 2D Cartesian grid. The maximum likelihood estimate (MLE) is also highlighted in 
+each case. Bottom row: Marginal posteriors for $\alpha$, $\lambda$ and $\gamma$.}
 \label{fig:like}
 \end{center}
 \end{figure}
 %
-Note that the joint likelihood was evaluated using a single data point for 
+Note that the joint posteriors were evaluated using a single data point for 
 $\kappa_{\tiny{\mbox{E}}}$ at 300~K. The same procedure for
 efficient parameter estimation could be repeated when data at multiple 
-temperatures is used for parameter estimation. However, an active
+temperatures is used. However, an active
 subspace at each temperature will have to be identified. 
-It is encouraging to note that the joint likelihood of $\alpha$ and $\gamma$,
+It is encouraging to note that the joint posterior of $\alpha$ and $\gamma$,
 obtained using the active subspace methodology
 in this work exhibits a qualitative agreement with that computed using
 the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
-Legendre polynomial basis in~(see Figure~11 in~\cite{Vohra:2018a}). 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Legendre polynomial basis~(see Figure~11 in~\cite{Vohra:2018a}). 
