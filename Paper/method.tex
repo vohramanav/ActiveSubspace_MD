@@ -252,9 +252,9 @@ variance. The RHS in~\eqref{eq:total} involves multidimensional integrals and is
 techniques such as Monte Carlo sampling. Hence, obtaining converged estimates of $T_i(G)$ might require a large 
 number of model runs depending upon the nature of the dependence of $G$ on $\xi_i$'s. To overcome this challenge,
 we exploit the surrogate, $\tilde{\mathcal{Y}}$ (see Algorithm~\ref{alg:surr} and related discussion in~\ref{sub:surr_sub})
-that essentially maps the canonical random variables, $\vec{\xi}$ to the QoI i.e the bulk thermal conductivity as 
+that essentially maps the canonical random variables $\vec{\xi}$ to the QoI (bulk thermal conductivity) as 
 $\tilde{\mathcal{Y}}(\mat{W}_1^\top\vec{\xi})$. Note that $\vec{\xi}$ exhibits a linear
-relationship with the physical parameters, $\vec{\theta}$ as discussed earlier in~\ref{sub:as}.
+relationship with the physical parameters $\vec{\theta}$ as discussed earlier in~\ref{sub:as}.
 Thus, a large number of
 independent random samples in the physical input domain can be mapped to the QoI to compute $T_i(G)$
 with negligible effort. 
@@ -339,10 +339,10 @@ order to reduce the computational effort associated with the
 likelihood estimation. Hence, in the calibration procedure, we account for the 
 error~($\varepsilon_\text{\tiny{SE}}$)
 incurred due to surrogate-based approximation of the model prediction as well as the
-physics-based model error~($\varepsilon_\text{\tiny{MD}}$).
+physics model error~($\varepsilon_\text{\tiny{MD}}$).
 In accordance with the Kennedy-O'Hagan approach~\cite{Kennedy:2001}, the two errors
 are considered as additive. The model predictions based on NEMD simulations are
-corrected for the physics-based model error as follows:
+corrected for the physics model error as follows:
 %
 \be
 \kappa_\text{MD}^c = \kappa_\text{MD} + \varepsilon_\text{MD}
@@ -358,10 +358,10 @@ and the measurement  noise~($\varepsilon_\text{obs}$) as follows~\cite{Liang:201
 \label{eq:like2}
 \ee
 %
-Based on the residual analysis discussed in~\cite{Haldar:2000}, the surrogate error is considered to 
-be normally distributed with a zero mean and a variance estimated using the discrepancy between
-the surrogate, $\tilde{\mathcal{Y}}$ and the function, $\mathcal{Y}$ plotted in 
-Figure~\ref{fig:casfig2}~(right). The measurement error, $\varepsilon_\text{obs}$ is also
+Based on the residual analysis discussed in~\cite{Haldar:2000}, the surrogate model error is considered to 
+be normally distributed with zero mean and variance estimated using the discrepancy between
+the surrogate $\tilde{\mathcal{Y}}$ and the function $\mathcal{Y}$ plotted in 
+Figure~\ref{fig:casfig2}~(right). The measurement error $\varepsilon_\text{obs}$ is also
 considered to be normally distributed. Since the likelihood is a function of the discrepancy,
 ($\kappa_\text{obs} - \kappa_\text{MD}^c$), we consider a normal distribution to 
 estimate the likelihood using~\eqref{eq:like1} and~\eqref{eq:like2} in Section~\ref{sec:results}.

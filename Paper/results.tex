@@ -186,7 +186,7 @@ activity scores, $\tilde{\nu}_{i,p}$, for GSA of the SW potential parameters.}
 \end{figure}
 %
 The sensitivity trends from the two approaches are found to be consistent. This is expected since
-both, the surrogate and the dominant eigenvectors are associated with the same 1-dimensional active 
+both the surrogate and the dominant eigenvectors are associated with the same 1-dimensional active 
 subspace. However, the quantitative agreement in the estimates of $T_i(G)$ and $\tilde{\nu}_{i,p}$
 is purely coincidental. The trends observed in Figure~\ref{fig:gsa} indicate
  that the variability in bulk thermal conductivity is predominantly
@@ -216,7 +216,7 @@ proportional to the joint likelihood, modeled using a Gaussian distribution:
 %
 \noindent where $\sigma$ is the standard deviation associated with measurement error, and
 $(\kappa_{\tiny{\mbox{E}}} - \kappa_{\tiny{\mbox{MD}}}^c)$ is the discrepancy between 
-NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}^c$) corrected for physics-based model error, 
+NEMD predictions~($\kappa_{\tiny{\mbox{MD}}}^c$) corrected for physics model error, 
 and the calibration data~($\kappa_{\tiny{\mbox{E}}}$). 
 Note that repeated evaluations of the joint likelihood can be remarkably challenging since it involves 
 $\kappa_{\tiny{\mbox{MD}}}$ (see~\eqref{eq:like1}). 
@@ -225,25 +225,28 @@ exploiting the surrogate
 $\tilde{\mathcal{Y}}(\vec{\eta})$ to map samples in the physical space to the estimates of 
 $\kappa_{\tiny{\mbox{MD}}}^c$, in~\eqref{eq:like}. Hence, the likelihood estimation in~\eqref{eq:like}
 accounts for the errors due to surrogate-based approximation~($\varepsilon_\text{\tiny{SE}}$), and
-physics-based model error~($\varepsilon_\text{\tiny{MD}}$) using~\eqref{eq:like1}~and~\eqref{eq:like2}.
+physics model error~($\varepsilon_\text{\tiny{MD}}$) using~\eqref{eq:like1}~and~\eqref{eq:like2}.
 
 The surrogate error $\varepsilon_\text{\tiny{SE}}$ in this case is a normally distributed random
 variable with mean 0. The variance was estimated to be 1.533 using discrepancy estimates, 
 ($\mathcal{Y}-\tilde{\mathcal{Y}}$), at the 25 points where NEMD data is available.  
-Physics-based model error~($\varepsilon_\text{\tiny{MD}}$) was estimated using a polynomial chaos
+The physics model error~($\varepsilon_\text{\tiny{MD}}$) was estimated using a polynomial chaos
 response surface constructed in~\cite{Vohra:2018a} at 
 300~K, and simulation conditions specified in Table~\ref{tab:input}. Note that the response surface
 captured the dependence of model discrepancy on the size of the Si bar and the applied thermal gradient
 (see Figure~4 in~\cite{Vohra:2018a}).
 
-The joint posteriors: ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$)
- were evaluated  on a 2D Cartesian grid containing
-40$\times$40 samples, and are shown
-using contour plots in Figure~\ref{fig:like}. Experimental value of 245~W/m/K for the
+The joint posterior of ($\alpha$,$\lambda$,$\gamma$) was computed on a 3D Cartesian grid containing
+10$\times$10$\times$10 samples. For the purpose of illustration, the joint posterior was projected on
+2D plans: $\alpha$-$\lambda$, $\alpha$-$\gamma$, and $\lambda$-$\gamma$ passing through the
+maximum a posteriori (MAP) point that corresponds to the highest value of the posterior probability,
+in each case. The co-ordinates of the MAP point were found to be 
+($\alpha$ = 1.98, $\lambda$ = 23.10, $\gamma$ = 1.08)
+The 2D contour plots are provided in Figure~\ref{fig:like}.
+Experimental observation of 245~W/m/K for the
 bulk thermal conductivity of silicon at 300~K~($\kappa_{\tiny{\mbox{E}}}$)~\cite{Volz:1999},
-and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, were used.
-Marginal posteriors of  $\alpha$, $\lambda$ and $\gamma$ are also
-shown in Figure,~\ref{fig:like}. 
+and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, were used to compute the 
+joint posterior.
 %
 \begin{figure}[htbp]
  \begin{center}
@@ -253,22 +256,21 @@ shown in Figure,~\ref{fig:like}.
   \includegraphics[width=0.33\textwidth]{./Figures/gl_ag}
 %  &
   \includegraphics[width=0.33\textwidth]{./Figures/gl_lg}
-  \\
-  \includegraphics[width=0.27\textwidth]{./Figures/pdf_alpha}
-%  &
-  \includegraphics[width=0.27\textwidth]{./Figures/pdf_lambda}
-%  &
-  \includegraphics[width=0.27\textwidth]{./Figures/pdf_gamma}
+%  \\
+%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_alpha}
+%%  &
+%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_lambda}
+%%  &
+%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_gamma}
 %  \end{tabular}
-\caption{Joint posteriors of ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$\gamma$),
-estimated using Eq.~\ref{eq:like} is plotted
-on a (40$\times$40) 2D Cartesian grid. The maximum likelihood estimate (MLE) is also highlighted in 
-each case. Bottom row: Marginal posteriors for $\alpha$, $\lambda$ and $\gamma$.}
+\caption{Contour plots of the joint posteriors, ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$
+\gamma$) obtained by projecting the 3-dimensional joint posterior of ($\alpha$,$\lambda$,$\gamma$)
+on a 2D plane passing through the MAP point (highlighted in each case).}
 \label{fig:like}
 \end{center}
 \end{figure}
 %
-Note that the joint posteriors were evaluated using a single data point for 
+Note that the posteriors were evaluated using a single data point for 
 $\kappa_{\tiny{\mbox{E}}}$ at 300~K. The same procedure for
 efficient parameter estimation could be repeated when data at multiple 
 temperatures is used. However, an active
