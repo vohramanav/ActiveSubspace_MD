@@ -236,41 +236,23 @@ response surface constructed in~\cite{Vohra:2018a} at
 captured the dependence of model discrepancy on the size of the Si bar and the applied thermal gradient
 (see Figure~4 in~\cite{Vohra:2018a}).
 
-The joint posterior of ($\alpha$,$\lambda$,$\gamma$) was computed on a 3D Cartesian grid containing
-10$\times$10$\times$10 samples. For the purpose of illustration, the joint posterior was projected on
-2D plans: $\alpha$-$\lambda$, $\alpha$-$\gamma$, and $\lambda$-$\gamma$ passing through the
-maximum a posteriori (MAP) point that corresponds to the highest value of the posterior probability,
-in each case. The co-ordinates of the MAP point were found to be 
-($\alpha$ = 1.98, $\lambda$ = 23.10, $\gamma$ = 1.08)
-The 2D contour plots are provided in Figure~\ref{fig:like}.
-Experimental observation of 245~W/m/K for the
+The joint posterior of ($\alpha$,$\lambda$,$\gamma$) was computed on a 3D Cartesian grid 
+containing 80$\times$80$\times$80 samples. Posterior marginal distributions of the three
+parameters are shown in Figure~\ref{fig:like}. The maximum a posteriori (MAP) point is
+located at $\alpha$ = 1.98, $\lambda$ = 23.10, and $\gamma$ = 1.08.
+The joint posterior was computed using the experimental observation of 245~W/m/K for the
 bulk thermal conductivity of silicon at 300~K~($\kappa_{\tiny{\mbox{E}}}$)~\cite{Volz:1999},
-and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$, were used to compute the 
-joint posterior.
+and a $\sigma$ value, 0.15$\ast$$\kappa_{\tiny{\mbox{E}}}$.
 %
 \begin{figure}[htbp]
  \begin{center}
-% \begin{tabular}{ccc}
-  \includegraphics[width=0.33\textwidth]{./Figures/gl_al}
-%  &
-  \includegraphics[width=0.33\textwidth]{./Figures/gl_ag}
-%  &
-  \includegraphics[width=0.33\textwidth]{./Figures/gl_lg}
-%  \\
-%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_alpha}
-%%  &
-%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_lambda}
-%%  &
-%  \includegraphics[width=0.27\textwidth]{./Figures/pdf_gamma}
-%  \end{tabular}
-\caption{Contour plots of the joint posteriors, ($\alpha$,$\lambda$), ($\alpha$,$\gamma$), and ($\lambda$,$
-\gamma$) obtained by projecting the 3-dimensional joint posterior of ($\alpha$,$\lambda$,$\gamma$)
-on a 2D plane passing through the MAP point (highlighted in each case).}
+  \includegraphics[width=0.8\textwidth]{./Figures/marg_dist}
+\caption{Posterior marginal distributions of $\alpha$, $\lambda$, and $\gamma$.}
 \label{fig:like}
 \end{center}
 \end{figure}
 %
-Note that the posteriors were evaluated using a single data point for 
+Note that the posterior is based on a single data point for 
 $\kappa_{\tiny{\mbox{E}}}$ at 300~K. The same procedure for
 efficient parameter estimation could be repeated when data at multiple 
 temperatures is used. However, an active
