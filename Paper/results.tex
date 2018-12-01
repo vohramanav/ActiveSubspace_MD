@@ -256,9 +256,28 @@ Note that the posterior is based on a single data point for
 $\kappa_{\tiny{\mbox{E}}}$ at 300~K. The same procedure for
 efficient parameter estimation could be repeated when data at multiple 
 temperatures is used. However, an active
-subspace at each temperature will have to be identified. 
-It is encouraging to note that the joint posterior of $\alpha$ and $\gamma$,
+subspace at each temperature will need to be identified.
+
+A joint likelihood of $\alpha$ and $\gamma$ was computed
+in~\cite{Vohra:2018a} using a 2-dimensional polynomial chaos surrogate.
+Dimension reduction was accomplished by computing the so-called screening
+metric~\cite{Vohra:2018b}
+(based on DGSM) for the SW parameters. Since the same experimental observation 
+has been used for calibration in this work, 
+we plot the joint posterior of  $\alpha$ and $\gamma$,
+conditioned upon the value of $\lambda$ at the MAP point for the purpose
+of comparison in Figure~\ref{fig:ag}.
+%
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width=0.5\textwidth]{./Figures/gl_ag}
+\caption{Joint posterior distribution of $\alpha$ and $\gamma$ conditioned upon the
+value of $\lambda$ at the MAP point (highlighted in the plot) i.e. $\lambda$ = 23.10.}
+\label{fig:ag}
+\end{center}
+\end{figure}
+%
+The joint posterior of $\alpha$ and $\gamma$,
 obtained using the active subspace methodology
-in this work exhibits a qualitative agreement with that computed using
-the same data point, and a reduced-space polynomial chaos surrogate with a 5-dimensional
-Legendre polynomial basis~(see Figure~11 in~\cite{Vohra:2018a}). 
+in this work is seen to exhibit a qualitative agreement with the joint likelihood obtained using
+the DGSM-based approach in~\cite{Vohra:2018a}. 
